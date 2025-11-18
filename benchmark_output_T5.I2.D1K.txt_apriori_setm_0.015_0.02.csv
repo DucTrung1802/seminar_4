@@ -1,0 +1,5 @@
+algorithm,support_percent,min_support,runtime_seconds,num_frequent_itemsets
+apriori,1.5,15,0.010018348693847656,21
+setm,1.5,15,0.033632516860961914,21
+apriori,2.0,20,0.0020008087158203125,5
+setm,2.0,20,0.0025396347045898438,5

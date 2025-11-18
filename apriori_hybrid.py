@@ -17,131 +17,104 @@ def create_C1(transactions):
 # Helper: Generate Ck from L(k-1)
 # ----------------------------------------------------
 def generate_candidates(prev_freq_itemsets, k):
-    candidates = []
-    Lk_1 = list(prev_freq_itemsets)
-    n = len(Lk_1)
+    candidates = set()
+    prev_list = list(prev_freq_itemsets)
+    prev_list_sorted = [tuple(sorted(itemset)) for itemset in prev_list]
 
+    n = len(prev_list_sorted)
     for i in range(n):
         for j in range(i + 1, n):
-            L1 = sorted(Lk_1[i])
-            L2 = sorted(Lk_1[j])
-
-            # join step
-            if L1[: k - 2] == L2[: k - 2]:
-                cand = frozenset(sorted(set(L1) | set(L2)))
-                candidates.append(cand)
-
+            L1, L2 = prev_list_sorted[i], prev_list_sorted[j]
+            if L1[: k - 2] == L2[: k - 2]:  # join step
+                candidates.add(frozenset(L1) | frozenset(L2))
     return candidates
 
 
 # ====================================================
-#                 APRIORI-HYBRID
+#                 APRIORI-HYBRID (Optimized)
 # ====================================================
-def apriori_hybrid(transactions, min_support, threshold_ratio=0.70):
+def apriori_hybrid(transactions, min_support, threshold_ratio=0.7):
     """
-    Apriori-Hybrid algorithm:
-      - Run Apriori (DB scan) until candidate(TID) table becomes small
-      - Then switch to Apriori-TID
-
-    threshold_ratio:
-        When #Ck falls below threshold_ratio * #C1, switch to Apriori-TID
+    Apriori-Hybrid: database scan + TID-list switching
     """
 
-    # ---------------------------
-    # STEP 1: Generate C1
-    # ---------------------------
+    # Convert transactions to sets once
+    transactions = [set(txn) for txn in transactions]
+
+    # Step 1: C1
     C1 = create_C1(transactions)
-
-    # Frequent 1-itemsets
     L1 = {item: tids for item, tids in C1.items() if len(tids) >= min_support}
-
     support_data = {item: len(tids) for item, tids in L1.items()}
     L = [list(L1.keys())]
 
-    # Track size of initial candidate set
     C1_size = len(C1)
-
     prev_L = L1
     k = 2
-    use_tid = False  # Switch flag to Apriori-TID
+    use_tid = False
 
-    # ======================================================
-    #                   MAIN LOOP
-    # ======================================================
     while prev_L:
-
-        # --------------------------------------------------
-        # GENERATE Ck
-        # --------------------------------------------------
+        # Generate Ck
         Ck = generate_candidates(prev_L.keys(), k)
-
         if not Ck:
             break
 
-        # Check candidate size to decide switching
-        if (len(Ck) < threshold_ratio * C1_size) and not use_tid:
+        # Decide whether to switch to TID mode
+        if not use_tid and len(Ck) < threshold_ratio * C1_size:
             use_tid = True
-            # print(f"Switching to Apriori-TID at k={k}")
 
-        # --------------------------------------------------
-        # APRIORI DATABASE-SCAN MODE
-        # --------------------------------------------------
+        # -----------------------
+        # DATABASE SCAN MODE
+        # -----------------------
         if not use_tid:
-
             Ck_count = defaultdict(int)
 
-            for tid, txn in enumerate(transactions):
-                txn_set = set(txn)
+            for txn in transactions:
                 for cand in Ck:
-                    if cand.issubset(txn_set):
+                    if cand.issubset(txn):
                         Ck_count[cand] += 1
 
+            # Filter by min_support
             Ck_freq = {
                 c: count for c, count in Ck_count.items() if count >= min_support
             }
-
             if not Ck_freq:
                 break
 
             L.append(list(Ck_freq.keys()))
+            support_data.update(Ck_freq)
 
-            for itemset, count in Ck_freq.items():
-                support_data[itemset] = count
-
-            # Prepare TID-lists for next iteration if hybrid may switch
+            # Build TID-lists for next iteration
             prev_L = {c: set() for c in Ck_freq.keys()}
-
-            # Build TID-lists only once here
             for tid, txn in enumerate(transactions):
-                txn_set = set(txn)
                 for c in prev_L.keys():
-                    if c.issubset(txn_set):
+                    if c.issubset(txn):
                         prev_L[c].add(tid)
 
-        # --------------------------------------------------
-        # APRIORI-TID MODE
-        # --------------------------------------------------
+        # -----------------------
+        # TID-LIST MODE
+        # -----------------------
         else:
-            Ck_tid = defaultdict(set)
-
+            Ck_tid = {}
             for cand in Ck:
                 subsets = [frozenset(s) for s in combinations(cand, k - 1)]
-
                 try:
-                    tidsets = [prev_L[s] for s in subsets]
+                    tid_iter = iter([prev_L[s] for s in subsets])
                 except KeyError:
                     continue
 
-                intersect_tids = set.intersection(*tidsets)
+                common_tids = next(tid_iter).copy()
+                for tidset in tid_iter:
+                    common_tids &= tidset
+                    if len(common_tids) < min_support:
+                        break  # early pruning
 
-                if len(intersect_tids) >= min_support:
-                    Ck_tid[cand] = intersect_tids
+                if len(common_tids) >= min_support:
+                    Ck_tid[cand] = common_tids
 
             if not Ck_tid:
                 break
 
             L.append(list(Ck_tid.keys()))
-
             for itemset, tids in Ck_tid.items():
                 support_data[itemset] = len(tids)
 

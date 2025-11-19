@@ -7,48 +7,50 @@ def create_C1(transactions):
     C1 = defaultdict(set)
     for tid, txn in enumerate(transactions):
         for item in txn:
-            C1[frozenset([item])].add(tid)
+            C1[(item,)].add(tid)  # use tuple instead of frozenset
     return C1
 
 
 def generate_candidates(prev_freq_itemsets, k):
     """
-    Generate Ck from L(k-1) efficiently:
-    - Avoid repeated sorting
-    - Work with tuples for join
+    Generate Ck from L(k−1) more efficiently.
     """
+    prev_list = sorted(prev_freq_itemsets)  # already tuples, so cheap
     candidates = set()
-    prev_list = list(prev_freq_itemsets)
-    prev_list_sorted = [tuple(sorted(itemset)) for itemset in prev_list]
 
-    for i in range(len(prev_list_sorted)):
-        for j in range(i + 1, len(prev_list_sorted)):
-            L1, L2 = prev_list_sorted[i], prev_list_sorted[j]
+    n = len(prev_list)
+    for i in range(n):
+        p = prev_list[i]
+        for j in range(i + 1, n):
+            q = prev_list[j]
 
-            if L1[: k - 2] == L2[: k - 2]:  # join step
-                candidates.add(frozenset(L1) | frozenset(L2))
+            # join step on first k−2 elements
+            if p[:-1] == q[:-1]:
+                # candidate is a tuple, sorted automatically
+                cand = p + (q[-1],)
+                candidates.add(cand)
+            else:
+                break  # because list is sorted, no further matches possible
 
     return candidates
 
 
 def apriori_tid(transactions, min_support):
     """
-    Optimized Apriori-TID algorithm.
-    Returns:
-        L: list of frequent itemsets per size
-        support_data: dict {itemset: support}
+    Optimized Apriori-TID.
     """
-    # Convert transactions to sets once (optional, improves issubset speed)
-    transactions = [set(txn) for txn in transactions]
+    # Convert transactions to sets once
+    transactions = [set(t) for t in transactions]
 
     # Step 1: C1
     C1 = create_C1(transactions)
     L1 = {itemset: tids for itemset, tids in C1.items() if len(tids) >= min_support}
+
     support_data = {itemset: len(tids) for itemset, tids in L1.items()}
     L = [list(L1.keys())]
 
-    k = 2
     prev_L = L1
+    k = 2
 
     while prev_L:
         # Generate Ck
@@ -56,35 +58,36 @@ def apriori_tid(transactions, min_support):
         if not Ck:
             break
 
-        # Build TID-lists for Ck via intersection of subsets
         Ck_tid = {}
+        # Now candidate itemsets are tuples, create subsets efficiently
         for cand in Ck:
-            # subsets of size k-1
-            subsets = [frozenset(s) for s in combinations(cand, k - 1)]
+            # get k−1 subsets using tuple slicing instead of combinations
+            subsets = (
+                (
+                    cand[1:],  # remove first
+                    cand[:-1],  # remove last
+                )
+                if k == 2
+                else [cand[:i] + cand[i + 1 :] for i in range(k)]
+            )
 
-            # Incremental intersection (avoid *tidsets unpacking)
             try:
-                tid_iter = iter(subset_tids := [prev_L[s] for s in subsets])
+                tid_lists = [prev_L[s] for s in subsets]
             except KeyError:
                 continue
 
-            common_tids = next(tid_iter).copy()
-            for tidset in tid_iter:
-                common_tids &= tidset
-                if len(common_tids) < min_support:
-                    break  # early pruning
+            # intersect tid lists (smallest first = faster)
+            tid_lists.sort(key=len)
+            common = tid_lists[0].intersection(*tid_lists[1:])
 
-            if len(common_tids) >= min_support:
-                Ck_tid[cand] = common_tids
+            if len(common) >= min_support:
+                Ck_tid[cand] = common
+                support_data[cand] = len(common)
 
         if not Ck_tid:
             break
 
-        # Store frequent itemsets and supports
         L.append(list(Ck_tid.keys()))
-        for itemset, tids in Ck_tid.items():
-            support_data[itemset] = len(tids)
-
         prev_L = Ck_tid
         k += 1
 

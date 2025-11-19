@@ -36,6 +36,7 @@ if __name__ == "__main__":
 
     # Now a LIST of files
     DATAFILES = [
+        # "T5.I2.D1K.txt",
         "T5.I2.D100K.txt",
         "T10.I2.D100K.txt",
         "T10.I4.D100K.txt",

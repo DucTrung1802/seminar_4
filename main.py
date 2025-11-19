@@ -1,7 +1,7 @@
 import time
 import csv
 
-from apriori import apriori
+from apriori import apriori_efficient
 from setm import SETM
 from apriori_tid import apriori_tid
 from apriori_hybrid import apriori_hybrid
@@ -34,15 +34,15 @@ def benchmark(algorithm_fn, *args):
 # ----------------------------------------------------
 if __name__ == "__main__":
 
-    DATAFILE = "T5.I2.D100K.txt"
+    DATAFILE = "T10.I4.D100K.txt"
 
     # Algorithms to test
-    ALGORITHM_LIST = ["apriori", "setm", "apriori_tid", "apriori_hybrid"]
+    ALGORITHM_LIST = ["setm", "apriori", "apriori_tid", "apriori_hybrid"]
 
     # Percent supports to test
     MIN_SUPPORT_PERCENT_LIST = [
-        0.0025,  # 0.25%
-        0.0033,  # 0.33%
+        # 0.0025,  # 0.25%
+        # 0.0033,  # 0.33%
         0.005,  # 0.5%
         0.0075,  # 0.75%
         0.01,  # 1%
@@ -90,14 +90,14 @@ if __name__ == "__main__":
 
             print(f"Running {algo}...")
 
-            if algo == "apriori":
-                (L, support_data), runtime = benchmark(
-                    apriori, transactions, MIN_SUPPORT
-                )
+            if algo == "setm":
+                (L, support_data), runtime = benchmark(SETM, transactions, MIN_SUPPORT)
                 num_itemsets = len(support_data)
 
-            elif algo == "setm":
-                (L, support_data), runtime = benchmark(SETM, transactions, MIN_SUPPORT)
+            elif algo == "apriori":
+                (L, support_data), runtime = benchmark(
+                    apriori_efficient, transactions, MIN_SUPPORT
+                )
                 num_itemsets = len(support_data)
 
             elif algo == "apriori_tid":

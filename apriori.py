@@ -1,81 +1,40 @@
-from itertools import combinations
-from collections import defaultdict
+from efficient_apriori import apriori
 
 
-def apriori(transactions, min_support):
+def apriori_efficient(transactions, min_support=2):
     """
-    Faster Apriori implementation with minor optimizations
+    Wrapper around the efficient-apriori library
+    to match the structure of your previous Apriori function.
+
+    Input:
+        transactions: list of lists/sets of items
+        min_support: integer support threshold (count, not fraction)
+
+    Output:
+        L: list of dicts ({frozenset: support_count}) by level
+        support_data: dict of all frequent itemsets with support counts
     """
-    # Convert each transaction to set once
-    transactions = list(map(set, transactions))
 
-    # Count 1-itemsets
-    item_counts = defaultdict(int)
-    for txn in transactions:
-        for item in txn:
-            item_counts[frozenset([item])] += 1
+    # Convert integer min_support (count) to fraction for the library
+    min_support_fraction = min_support / len(transactions)
 
-    # Filter frequent 1-itemsets
-    L1 = {item for item, count in item_counts.items() if count >= min_support}
-    support_data = {
-        item: count for item, count in item_counts.items() if count >= min_support
-    }
+    # Run Apriori from library
+    itemsets, _ = apriori(
+        transactions,
+        min_support=min_support_fraction,
+        min_confidence=0.0,  # confidence not needed
+    )
 
-    L = [L1]
-    k = 2
+    # Reform into your desired output format:
+    # L = [{frozenset: count}, {frozenset: count}, ...]
+    L = []
+    support_data = {}
 
-    while True:
-        prev_Lk = L[-1]
-        if not prev_Lk:
-            break
-
-        # Generate candidates
-        candidates = generate_candidates(prev_Lk, k)
-
-        # Count support efficiently
-        candidate_counts = defaultdict(int)
-        for txn in transactions:
-            # Only check candidates whose items are subset of txn
-            for cand in candidates:
-                if cand.issubset(txn):
-                    candidate_counts[cand] += 1
-
-        # Filter by min_support
-        Lk = {cand for cand, count in candidate_counts.items() if count >= min_support}
-
-        if not Lk:
-            break
-
-        L.append(Lk)
-        support_data.update(
-            {
-                cand: count
-                for cand, count in candidate_counts.items()
-                if count >= min_support
-            }
-        )
-
-        k += 1
+    for k in sorted(itemsets.keys()):
+        level_dict = {}
+        for itemset, support in itemsets[k].items():
+            level_dict[frozenset(itemset)] = support
+            support_data[frozenset(itemset)] = support
+        L.append(level_dict)
 
     return L, support_data
-
-
-def generate_candidates(prev_Lk, k):
-    """
-    Generate Ck from L(k−1) efficiently.
-    """
-    candidates = set()
-    prev_Lk_list = list(prev_Lk)
-
-    for i in range(len(prev_Lk_list)):
-        for j in range(i + 1, len(prev_Lk_list)):
-            a = prev_Lk_list[i]
-            b = prev_Lk_list[j]
-
-            # Join step only if first k-2 items are equal
-            a_list = sorted(a)
-            b_list = sorted(b)
-            if a_list[: k - 2] == b_list[: k - 2]:
-                candidates.add(frozenset(a | b))
-
-    return candidates

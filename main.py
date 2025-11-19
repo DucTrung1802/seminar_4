@@ -34,92 +34,113 @@ def benchmark(algorithm_fn, *args):
 # ----------------------------------------------------
 if __name__ == "__main__":
 
-    DATAFILE = "T10.I4.D100K.txt"
+    # Now a LIST of files
+    DATAFILES = [
+        "T5.I2.D100K.txt",
+        "T10.I2.D100K.txt",
+        "T10.I4.D100K.txt",
+        "T20.I2.D100K.txt",
+        "T20.I4.D100K.txt",
+        "T20.I6.D100K.txt",
+    ]
 
     # Algorithms to test
     ALGORITHM_LIST = ["setm", "apriori", "apriori_tid", "apriori_hybrid"]
 
     # Percent supports to test
     MIN_SUPPORT_PERCENT_LIST = [
-        # 0.0025,  # 0.25%
-        # 0.0033,  # 0.33%
-        0.005,  # 0.5%
-        0.0075,  # 0.75%
-        0.01,  # 1%
-        0.015,  # 1.5%
-        0.02,  # 2%
+        0.0025,
+        0.0033,
+        0.005,
+        0.0075,
+        0.01,
+        0.015,
+        0.02,
     ]
 
-    print("Loading transactions...")
-    transactions = load_transactions(DATAFILE)
-    print(f"Loaded {len(transactions)} transactions\n")
-
-    # Convert list values into strings for the file name
-    algos_str = "_".join(ALGORITHM_LIST)
-    supports_str = "_".join(str(p) for p in MIN_SUPPORT_PERCENT_LIST)
-
-    # Output CSV file name includes dataset, algorithms, supports
-    csv_filename = f"benchmark_output_{DATAFILE}_{algos_str}_{supports_str}.csv"
-    csvfile = open(csv_filename, "w", newline="")
-    writer = csv.writer(csvfile)
-
-    writer.writerow(
-        [
-            "algorithm",
-            "support_percent",
-            "min_support",
-            "runtime_seconds",
-            "num_frequent_itemsets",
-        ]
-    )
-
     # ----------------------------------------------------
-    # Loop over support % values
+    # Loop over each dataset file
     # ----------------------------------------------------
-    for pct in MIN_SUPPORT_PERCENT_LIST:
-        MIN_SUPPORT = int(pct * len(transactions))
-        if MIN_SUPPORT < 1:
-            MIN_SUPPORT = 1
+    for DATAFILE in DATAFILES:
 
-        print(f"\n=== Testing support {pct*100:.2f}% (min_support={MIN_SUPPORT}) ===")
+        print(f"\n==============================")
+        print(f"Loading dataset: {DATAFILE}")
+        print(f"==============================")
+
+        transactions = load_transactions(DATAFILE)
+        print(f"Loaded {len(transactions)} transactions\n")
+
+        # Convert list values into strings for file name
+        algos_str = "_".join(ALGORITHM_LIST)
+        supports_str = "_".join(str(p) for p in MIN_SUPPORT_PERCENT_LIST)
+
+        # Output CSV name includes dataset name
+        csv_filename = f"benchmark_output_{DATAFILE}_{algos_str}_{supports_str}.csv"
+        csvfile = open(csv_filename, "w", newline="")
+        writer = csv.writer(csvfile)
+
+        writer.writerow(
+            [
+                "algorithm",
+                "support_percent",
+                "min_support",
+                "runtime_seconds",
+                "num_frequent_itemsets",
+            ]
+        )
 
         # ----------------------------------------------------
-        # Loop over algorithms
+        # Loop over support % values
         # ----------------------------------------------------
-        for algo in ALGORITHM_LIST:
+        for pct in MIN_SUPPORT_PERCENT_LIST:
 
-            print(f"Running {algo}...")
+            MIN_SUPPORT = int(pct * len(transactions))
+            if MIN_SUPPORT < 1:
+                MIN_SUPPORT = 1
 
-            if algo == "setm":
-                (L, support_data), runtime = benchmark(SETM, transactions, MIN_SUPPORT)
-                num_itemsets = len(support_data)
+            print(
+                f"\n=== Testing support {pct*100:.2f}% (min_support={MIN_SUPPORT}) ==="
+            )
 
-            elif algo == "apriori":
-                (L, support_data), runtime = benchmark(
-                    apriori_efficient, transactions, MIN_SUPPORT
-                )
-                num_itemsets = len(support_data)
+            # ----------------------------------------------------
+            # Loop over algorithms
+            # ----------------------------------------------------
+            for algo in ALGORITHM_LIST:
 
-            elif algo == "apriori_tid":
-                (L, support_data), runtime = benchmark(
-                    apriori_tid, transactions, MIN_SUPPORT
-                )
-                num_itemsets = len(support_data)
+                print(f"Running {algo}...")
 
-            elif algo == "apriori_hybrid":
-                (L, support_data), runtime = benchmark(
-                    apriori_hybrid, transactions, MIN_SUPPORT
-                )
-                num_itemsets = len(support_data)
+                if algo == "setm":
+                    (L, support_data), runtime = benchmark(
+                        SETM, transactions, MIN_SUPPORT
+                    )
+                    num_itemsets = len(support_data)
 
-            else:
-                print(f"Unknown algorithm: {algo}")
-                continue
+                elif algo == "apriori":
+                    (L, support_data), runtime = benchmark(
+                        apriori_efficient, transactions, MIN_SUPPORT
+                    )
+                    num_itemsets = len(support_data)
 
-            print(f"{algo} finished in {runtime:.4f} sec ({num_itemsets} itemsets)")
+                elif algo == "apriori_tid":
+                    (L, support_data), runtime = benchmark(
+                        apriori_tid, transactions, MIN_SUPPORT
+                    )
+                    num_itemsets = len(support_data)
 
-            # Write one row to CSV file
-            writer.writerow([algo, pct * 100, MIN_SUPPORT, runtime, num_itemsets])
+                elif algo == "apriori_hybrid":
+                    (L, support_data), runtime = benchmark(
+                        apriori_hybrid, transactions, MIN_SUPPORT
+                    )
+                    num_itemsets = len(support_data)
 
-    csvfile.close()
-    print(f"\nBenchmark complete. Results saved to: {csv_filename}")
+                else:
+                    print(f"Unknown algorithm: {algo}")
+                    continue
+
+                print(f"{algo} finished in {runtime:.4f} sec ({num_itemsets} itemsets)")
+
+                # Write results for this dataset
+                writer.writerow([algo, pct * 100, MIN_SUPPORT, runtime, num_itemsets])
+
+        csvfile.close()
+        print(f"\nBenchmark for {DATAFILE} complete. Saved: {csv_filename}")

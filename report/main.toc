@@ -1,0 +1,70 @@
+\contentsline {chapter}{Giới thiệu}{1}{chapter*.1}%
+\contentsline {chapter}{\numberline {1}Tổng quan về khai phá dữ liệu và luật kết hợp}{3}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Tổng quan về khai phá dữ liệu}{3}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}Khái niệm khai phá dữ liệu}{3}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}Vai trò của khai phá dữ liệu}{3}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.3}Các nhiệm vụ chính trong khai phá dữ liệu}{4}{subsection.1.1.3}%
+\contentsline {section}{\numberline {1.2}Khai phá luật kết hợp}{4}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Mục đích của luật kết hợp}{4}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Ứng dụng trong thực tế}{5}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}Ý nghĩa trong hệ thống gợi ý}{5}{subsection.1.2.3}%
+\contentsline {section}{\numberline {1.3}Mô hình dữ liệu giỏ hàng (Basket Data)}{5}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}Khái niệm và cấu trúc dữ liệu}{5}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Đặc trưng của dữ liệu giỏ hàng}{5}{subsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.3.3}Ví dụ minh hoạ dữ liệu giao dịch}{6}{subsection.1.3.3}%
+\contentsline {section}{\numberline {1.4}Các khái niệm cơ bản}{6}{section.1.4}%
+\contentsline {subsection}{\numberline {1.4.1}Độ hỗ trợ (Support)}{6}{subsection.1.4.1}%
+\contentsline {subsection}{\numberline {1.4.2}Độ tin cậy (Confidence)}{6}{subsection.1.4.2}%
+\contentsline {subsection}{\numberline {1.4.3}Mục tiêu của khai phá luật kết hợp}{7}{subsection.1.4.3}%
+\contentsline {section}{\numberline {1.5}Các bài toán con trong khai phá luật kết hợp}{7}{section.1.5}%
+\contentsline {chapter}{\numberline {2}Thuật toán Apriori}{8}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Giới thiệu}{8}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Nguyên lý cốt lõi}{8}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Tính chất cơ bản của Apriori}{8}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Ý nghĩa của nguyên lý}{9}{subsection.2.2.2}%
+\contentsline {section}{\numberline {2.3}Quy trình hoạt động của Apriori}{9}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Giả mã thuật toán}{10}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Sinh tập ứng viên}{10}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Bước Join}{10}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Bước Prune}{11}{subsection.2.5.2}%
+\contentsline {section}{\numberline {2.6}Ví dụ minh họa}{11}{section.2.6}%
+\contentsline {subsection}{\numberline {2.6.1}Bước 1: Tìm frequent 1-itemsets}{11}{subsection.2.6.1}%
+\contentsline {subsection}{\numberline {2.6.2}Bước 2: Sinh frequent 2-itemsets}{12}{subsection.2.6.2}%
+\contentsline {subsection}{\numberline {2.6.3}Bước 3: Sinh frequent 3-itemsets}{12}{subsection.2.6.3}%
+\contentsline {subsection}{\numberline {2.6.4}Kết quả}{13}{subsection.2.6.4}%
+\contentsline {section}{\numberline {2.7}Kết luận}{13}{section.2.7}%
+\contentsline {chapter}{\numberline {3}Thuật toán AprioriTid}{14}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Giới thiệu}{14}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Ý tưởng và nguyên lý hoạt động}{14}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Giả mã thuật toán AprioriTid}{15}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Ví dụ minh họa}{16}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Bước 1: Tìm L1 và C1\_bar}{16}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Bước 2: Sinh C2 và tính L2}{17}{subsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.4.3}Bước 3: Sinh C3 và tính L3}{18}{subsection.3.4.3}%
+\contentsline {subsection}{\numberline {3.4.4}Kết quả cuối cùng}{18}{subsection.3.4.4}%
+\contentsline {section}{\numberline {3.5}Nhận xét về thuật toán AprioriTid}{19}{section.3.5}%
+\contentsline {section}{\numberline {3.6}Kết luận}{19}{section.3.6}%
+\contentsline {chapter}{\numberline {4}Thuật toán AprioriHybrid}{20}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Giới thiệu}{20}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Ý tưởng của AprioriHybrid}{20}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Quy trình tổng quát của AprioriHybrid}{21}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Lợi ích của việc kết hợp}{21}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Phân tích ưu điểm và hạn chế}{22}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Ưu điểm}{22}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}Hạn chế}{22}{subsection.4.5.2}%
+\contentsline {chapter}{\numberline {5}Đánh giá hiệu năng và so sánh các thuật toán}{23}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Các yếu tố ảnh hưởng hiệu năng}{24}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Số lượng giao dịch |D|}{24}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Số lượng mặt hàng |I|}{24}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Độ dài trung bình giao dịch |T|}{24}{subsection.5.1.3}%
+\contentsline {subsection}{\numberline {5.1.4}Kích thước ứng viên và số vòng lặp}{24}{subsection.5.1.4}%
+\contentsline {section}{\numberline {5.2}So sánh Apriori, AprioriTid và AprioriHybrid}{24}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Số lần quét CSDL}{24}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Tốc độ thực thi}{24}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Sử dụng bộ nhớ}{24}{subsection.5.2.3}%
+\contentsline {subsection}{\numberline {5.2.4}Độ hiệu quả khi minsup thấp / cao}{24}{subsection.5.2.4}%
+\contentsline {section}{\numberline {5.3}Kết quả thực nghiệm và biểu đồ minh hoạ}{24}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Biểu đồ số ứng viên theo vòng}{24}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Biểu đồ thời gian chạy ba thuật toán}{24}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.3.3}Nhận xét kết quả}{24}{subsection.5.3.3}%
+\contentsline {chapter}{Kết luận}{25}{chapter*.2}%

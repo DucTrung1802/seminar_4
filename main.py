@@ -55,8 +55,8 @@ if __name__ == "__main__":
         # "T5.I2.D1K.txt",
         # "T5.I2.D100K.txt",
         # "T10.I2.D100K.txt",
-        r"T10\.I4\.D100K\.S.*\.txt",
-        # "T20.I2.D100K.txt",
+        # r"T10\.I4\.D100K\.S.*\.txt",
+        r"T20\.I2\.D100K\.S.*\.txt",
         # "T20.I4.D100K.txt",
         # "T20.I6.D100K.txt",
     ]

@@ -127,8 +127,8 @@ if __name__ == "__main__":
     # --- PARAMETERS ---
     N = 1000
     L = 2000
-    I_mean = 4
-    T_mean = 10
+    I_mean = 2
+    T_mean = 20
     D = 100_000
 
     seed_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]

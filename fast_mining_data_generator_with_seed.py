@@ -127,7 +127,7 @@ if __name__ == "__main__":
     # --- PARAMETERS ---
     N = 1000
     L = 2000
-    I_mean = 2
+    I_mean = 4
     T_mean = 20
     D = 100_000
 

@@ -1,5 +1,7 @@
 import time
 import csv
+import os
+import re
 
 from apriori import apriori_efficient
 from setm import SETM
@@ -29,6 +31,20 @@ def benchmark(algorithm_fn, *args):
     return result, end - start
 
 
+def expand_datafiles(regex_list, folder="."):
+    """Return list of filenames matching any regex in regex_list."""
+    all_files = os.listdir(folder)
+    selected = []
+
+    for pattern in regex_list:
+        regex = re.compile(pattern)
+        for f in all_files:
+            if regex.fullmatch(f):
+                selected.append(f)
+
+    return sorted(selected)
+
+
 # ----------------------------------------------------
 # Main
 # ----------------------------------------------------
@@ -37,12 +53,12 @@ if __name__ == "__main__":
     # Now a LIST of files
     DATAFILES = [
         # "T5.I2.D1K.txt",
-        "T5.I2.D100K.txt",
-        "T10.I2.D100K.txt",
-        "T10.I4.D100K.txt",
-        "T20.I2.D100K.txt",
-        "T20.I4.D100K.txt",
-        "T20.I6.D100K.txt",
+        # "T5.I2.D100K.txt",
+        # "T10.I2.D100K.txt",
+        r"T10\.I4\.D100K\.S.*\.txt",
+        # "T20.I2.D100K.txt",
+        # "T20.I4.D100K.txt",
+        # "T20.I6.D100K.txt",
     ]
 
     # Algorithms to test
@@ -62,7 +78,8 @@ if __name__ == "__main__":
     # ----------------------------------------------------
     # Loop over each dataset file
     # ----------------------------------------------------
-    for DATAFILE in DATAFILES:
+    matched_files = expand_datafiles(DATAFILES)
+    for DATAFILE in matched_files:
 
         print(f"\n==============================")
         print(f"Loading dataset: {DATAFILE}")
@@ -75,8 +92,17 @@ if __name__ == "__main__":
         algos_str = "_".join(ALGORITHM_LIST)
         supports_str = "_".join(str(p) for p in MIN_SUPPORT_PERCENT_LIST)
 
-        # Output CSV name includes dataset name
-        csv_filename = f"benchmark_output_{DATAFILE}_{algos_str}_{supports_str}.csv"
+        # Extract seed (e.g., S1207)
+        seed_match = re.search(r"S(\d+)", DATAFILE)
+        seed_suffix = ""
+        if seed_match:
+            seed_suffix = f"_s{seed_match.group(1)}"
+
+        # Output CSV name includes dataset name + seed
+        csv_filename = (
+            f"benchmark_output_{DATAFILE}_{algos_str}_{supports_str}{seed_suffix}.csv"
+        )
+
         csvfile = open(csv_filename, "w", newline="")
         writer = csv.writer(csvfile)
 

@@ -1,8 +1,8 @@
 """
-Synthetic T*.I*.D* dataset generator with auto-naming.
+Synthetic T*.I*.D* dataset generator with auto-naming and seed loop.
 
-Auto filename: T{T_mean}.I{I_mean}.D{D}.txt
-Example: T5.I2.D100000.txt
+Auto filename: T{T_mean}.I{I_mean}.D{D}.S{seed}.txt
+Example: T5.I2.D100000.S1207.txt
 """
 
 import random
@@ -87,26 +87,21 @@ def generate_transactions(
     return transactions
 
 
-def auto_filename(T_mean, I_mean, D, N=None, L=None, include_NL=False):
-    """Generate filename using K, M, G units for D."""
+def auto_filename(T_mean, I_mean, D, seed, N=None, L=None, include_NL=False):
+    """Generate filename using K, M, G units for D and append seed."""
 
     def scale_value(x):
-        # G (>= 1 billion)
         if x >= 1_000_000_000:
             return format_unit(x, 1_000_000_000, "G")
-        # M (>= 1 million)
         elif x >= 1_000_000:
             return format_unit(x, 1_000_000, "M")
-        # K (>= 1 thousand)
         elif x >= 1_000:
             return format_unit(x, 1_000, "K")
-        # no unit
         else:
             return str(x)
 
     def format_unit(x, unit_size, unit_label):
         value = x / unit_size
-        # If integer (e.g. 1000000/1000000 = 1), show without decimals
         if value.is_integer():
             return f"{int(value)}{unit_label}"
         else:
@@ -114,7 +109,7 @@ def auto_filename(T_mean, I_mean, D, N=None, L=None, include_NL=False):
 
     D_str = scale_value(D)
 
-    base = f"T{T_mean}.I{I_mean}.D{D_str}"
+    base = f"T{T_mean}.I{I_mean}.D{D_str}.S{seed}"  # <<< ADDED seed
 
     if include_NL:
         base += f".N{N}.L{L}"
@@ -135,20 +130,27 @@ if __name__ == "__main__":
     I_mean = 4
     T_mean = 10
     D = 100_000
-    seed = 1207
-    include_NL_in_filename = False  # optional
 
-    filename = auto_filename(T_mean, I_mean, D, N, L, include_NL=include_NL_in_filename)
-    print("Output will be saved as:", filename)
+    seed_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-    print("Generating maximal itemsets...")
-    maximal_sets = generate_maximal_itemsets(N=N, L=L, I_mean=I_mean, seed=seed)
+    include_NL_in_filename = False
 
-    print("Generating transactions...")
-    transactions = generate_transactions(
-        D=D, T_mean=T_mean, maximal_sets=maximal_sets, N=N, seed=seed
-    )
+    for seed in seed_list:  # <<< ADDED loop
+        print("\n=== Generating dataset for seed:", seed, "===")
 
-    print("Writing file...")
-    write_transactions(transactions, filename)
-    print("Done.")
+        filename = auto_filename(
+            T_mean, I_mean, D, seed, N, L, include_NL=include_NL_in_filename
+        )
+        print("Output will be saved as:", filename)
+
+        print("Generating maximal itemsets...")
+        maximal_sets = generate_maximal_itemsets(N=N, L=L, I_mean=I_mean, seed=seed)
+
+        print("Generating transactions...")
+        transactions = generate_transactions(
+            D=D, T_mean=T_mean, maximal_sets=maximal_sets, N=N, seed=seed
+        )
+
+        print("Writing file...")
+        write_transactions(transactions, filename)
+        print("Done.")

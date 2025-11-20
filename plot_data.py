@@ -5,41 +5,66 @@ import glob
 import os
 
 # --- 1. Loop through all CSV files in folder ---
-csv_files = glob.glob("*.csv")   # adjust path if needed
+csv_files = glob.glob("*.csv")  # adjust path if needed
 
 for filename in csv_files:
-    print(f"Processing: {filename}")
+    print(f"\nProcessing: {filename}")
 
-    # Load file
-    df = pd.read_csv(filename)
+    # ----------------------------------------------------
+    # Try loading the CSV
+    # ----------------------------------------------------
+    try:
+        df = pd.read_csv(filename)
+    except Exception as e:
+        print(f"❌ Failed to load {filename}: {e}")
+        continue
 
-    # --- 2. Extract title from filename ---
-    match = re.search(r"T\d+\.\w+\.\w+", filename)
-    title = match.group(0) if match else "Plot"
+    # Required columns check
+    required_cols = {"algorithm", "support_percent", "runtime_seconds"}
+    if not required_cols.issubset(df.columns):
+        print(f"❌ Missing required columns in {filename}. Skipping.")
+        continue
 
-    # --- 3. Plot line chart ---
-    plt.figure(figsize=(10, 6))
+    # ----------------------------------------------------
+    # Extract title from filename (T?.I?.D?.S?)
+    # ----------------------------------------------------
+    try:
+        match = re.search(r"(T\d+\.I\d+\.D\w+\.S\d+)", filename)
+        title = match.group(1) if match else "Plot"
+    except Exception as e:
+        print(f"❌ Title extraction error for {filename}: {e}")
+        continue
 
-    for algo in df["algorithm"].unique():
-        subset = df[df["algorithm"] == algo]
-        plt.plot(
-            subset["support_percent"], 
-            subset["runtime_seconds"], 
-            marker="o", 
-            label=algo
-        )
+    # ----------------------------------------------------
+    # Plot the line chart
+    # ----------------------------------------------------
+    try:
+        plt.figure(figsize=(10, 6))
 
-    plt.title(f"Runtime vs Support Percent ({title})")
-    plt.xlabel("support percent (%)")
-    plt.ylabel("runtime (s)")
-    plt.legend()
-    plt.grid(True)
-    plt.gca().invert_xaxis()   # reverse horizontal axis
-    plt.tight_layout()
+        for algo in df["algorithm"].unique():
+            subset = df[df["algorithm"] == algo]
+            plt.plot(
+                subset["support_percent"],
+                subset["runtime_seconds"],
+                marker="o",
+                label=algo,
+            )
 
-    # Optional: save to file instead of showing each
-    outname = f"{title}_runtime_plot.png"
-    plt.savefig(outname, dpi=150)
-    plt.close()
+        plt.title(f"Runtime vs Support Percent ({title.split('.')[:-1]})")
+        plt.xlabel("support percent (%)")
+        plt.ylabel("runtime (s)")
+        plt.legend()
+        plt.grid(True)
+        plt.gca().invert_xaxis()
+        plt.tight_layout()
 
-    print(f"Saved plot: {outname}")
+        # Save output
+        outname = f"{title}_runtime_plot.png"
+        plt.savefig(outname, dpi=150)
+        plt.close()
+
+        print(f"✅ Saved plot: {outname}")
+
+    except Exception as e:
+        print(f"❌ Plotting failed for {filename}: {e}")
+        continue

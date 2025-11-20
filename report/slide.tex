@@ -1,0 +1,318 @@
+
+\documentclass[professionalfont,12pt]{beamer}
+
+\usepackage[utf8]{vietnam}
+\usepackage[vietnamese,english]{babel}
+\usepackage{color}
+\usepackage{xcolor}
+\usetheme{CambridgeUS}
+\usepackage{tikz-dependency}
+\usepackage{xcolor,colortbl}
+\usepackage[utf8]{vietnam}
+\usepackage{multirow}
+%\colorlet{newred}{red!60!black}
+\usepackage{booktabs}
+
+\title[LORA: Low-Rank Adaptation]{\textbf{LORA: Low-Rank Adaptation of Large Language Models}}
+\author[]{Nguyễn Thị Ngọc Uyên \and Phạm Thị Đức}
+\institute[HUS - VNU]{
+Khoa Toán - Cơ - Tin học\\
+Trường Đại học Khoa học Tự nhiên, ĐHQGHN\\
+\textit{Giảng viên hướng dẫn: PGS.TS Trần Trọng Hiếu}
+}
+\date{Hà Nội, 2025}
+
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamerfont{title}{series=\bfseries}
+\setbeamerfont{normaltext}{size=\Large}
+\AtBeginSection[]
+{
+ \begin{frame}<beamer>
+   \frametitle{Mục lục}
+   \tableofcontents[currentsection]
+   %\tableofcontents
+ \end{frame}
+}
+%\usecolortheme{whale}
+\begin{document}
+%\narrowfont
+
+\frame{\titlepage}
+
+\setcounter{framenumber}{0}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+
+\begin{frame}<beamer>
+   \frametitle{Mục lục}
+   %\tableofcontents[currentsection]
+   \tableofcontents
+ \end{frame}
+
+
+%------------------- Slide 2 -------------------
+\section{Tổng quan}
+\begin{frame}{Giới thiệu}
+    \begin{itemize}
+        \item Các mô hình ngôn ngữ lớn (LLMs) như GPT, BERT, LLaMA, T5 đạt nhiều thành tựu vượt trội.
+        \item Tuy nhiên, việc tinh chỉnh toàn bộ mô hình (Full Fine-tuning) đòi hỏi:
+        \begin{itemize}
+            \item Tài nguyên tính toán lớn (GPU, bộ nhớ)
+            \item Thời gian huấn luyện dài
+            \item Nguy cơ \textit{overfitting}
+        \end{itemize}
+        \item Giải pháp: \textbf{Parameter-Efficient Fine-Tuning (PEFT)} — chỉ tinh chỉnh một phần nhỏ tham số.
+    \end{itemize}
+\end{frame}
+
+%------------------- Slide 3 -------------------
+\begin{frame}{Động cơ nghiên cứu}
+    \begin{itemize}
+        \item \textbf{Thách thức:}
+        \begin{itemize}
+            \item Full fine-tuning tiêu tốn hàng trăm GB bộ nhớ GPU.
+            \item Mỗi tác vụ cần một bản tinh chỉnh riêng biệt.
+        \end{itemize}
+        \item \textbf{Giải pháp:} PEFT cho phép:
+        \begin{itemize}
+            \item Giữ nguyên mô hình gốc, chỉ học vài tham số mới.
+            \item Dễ chia sẻ, tái sử dụng mô hình.
+        \end{itemize}
+        \item \textbf{LoRA (Low-Rank Adaptation)}: giảm tới \textbf{10.000 lần số tham số} mà vẫn giữ hiệu năng tương đương.
+    \end{itemize}
+\end{frame}
+
+%------------------- Slide 4 -------------------
+\begin{frame}{Kiến thức nền tảng}
+    \begin{itemize}
+        \item \textbf{Transformer}: kiến trúc dựa trên cơ chế \textit{self-attention}, giúp mô hình học quan hệ giữa các từ song song.
+        \item \textbf{Full Fine-tuning}: cập nhật toàn bộ trọng số mô hình – hiệu năng cao nhưng chi phí lớn.
+        \item \textbf{PEFT}: chỉ tinh chỉnh các mô-đun nhỏ, giúp giảm chi phí huấn luyện mà vẫn duy trì hiệu năng.
+    \end{itemize}
+\end{frame}
+
+%------------------- Slide 5 -------------------
+\begin{frame}{Các phương pháp PEFT phổ biến}
+    \begin{itemize}
+        \item \textbf{Adapter Tuning}: thêm tầng phụ nhỏ giữa các tầng Transformer.
+        \item \textbf{Prefix/Prompt Tuning}: học thêm chuỗi tham số được chèn vào đầu vào.
+        \item \textbf{BitFit}: chỉ tinh chỉnh các tham số bias.
+        \item \textbf{Compacter}: biểu diễn hạng thấp cho adapter.
+        \item \textbf{LoRA}: áp dụng ràng buộc hạng thấp lên ma trận trọng số.
+    \end{itemize}
+\end{frame}
+
+\section{Phương pháp LoRA}
+%------------------- Slide 6 -------------------
+\begin{frame}{Nguyên lý hoạt động của LoRA}
+    \begin{itemize}
+        \item Quan sát: thay đổi trọng số khi fine-tuning chỉ nằm trong không gian con hạng thấp.
+        \item LoRA tái tham số hóa ma trận trọng số:
+        \[
+        W = W_0 + BA,\quad B \in \mathbb{R}^{d \times r}, A \in \mathbb{R}^{r \times k},\ r \ll \min(d,k)
+        \]
+        \item Giảm tham số huấn luyện từ \(d \times k\) xuống \(r(d + k)\).
+        \item Với \(r = 8\), giảm hơn 500 lần số tham số cần tinh chỉnh.
+    \end{itemize}
+\end{frame}
+
+%------------------- Slide 7 -------------------
+\begin{frame}{Minh họa cơ chế LoRA}
+\begin{columns}[c] % [c] để canh giữa theo chiều dọc
+    %--------- Cột 1: Hình ảnh ----------
+    \begin{column}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=0.55\textheight, keepaspectratio]{img/lora_img.png}
+        \vspace{0.3em}
+        {\scriptsize Hình minh họa cơ chế tái tham số hóa trọng số trong LoRA.}
+    \end{column}
+
+    %--------- Cột 2: Giải thích ----------
+    \begin{column}{0.5\textwidth}
+        \small
+        \begin{itemize}\setlength{\itemsep}{4pt}
+            \item $W_0$: trọng số gốc được giữ nguyên. 
+            \item $A, B$: hai ma trận hạng thấp được huấn luyện.
+            \item Kết quả: chỉ cần huấn luyện rất ít tham số.
+            \item Khi huấn luyện xong, có thể gộp $(W_0 + BA)$ để dùng cho suy luận mà không tăng độ trễ.
+        \end{itemize}
+    \end{column}
+\end{columns}
+\end{frame}
+
+
+%------------------- Slide 8 -------------------
+\begin{frame}{So sánh LoRA với các phương pháp khác}
+    \centering
+    \scriptsize
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|l|c|c|c|p{3.5cm}|}
+        \hline
+        \textbf{Phương pháp} & \textbf{Thay đổi kiến trúc} & \textbf{Tỷ lệ tham số} & \textbf{Độ trễ} & \textbf{Đặc điểm} \\
+        \hline
+        Adapter Tuning & Có & 1–3\% & Có & Hiệu năng cao nhưng tăng độ sâu mô hình \\
+        Prefix Tuning & Không & <1\% & Không & Đơn giản, phụ thuộc độ dài prefix \\
+        BitFit & Không & 0.1\% & Không & Rất nhẹ, hiệu năng giới hạn \\
+        Compacter & Có & 0.5\% & Nhỏ & Adapter nén, hiệu quả cao \\
+        LoRA & Không & <1\% & Không & Ràng buộc hạng thấp, dễ tích hợp \\
+        \hline
+    \end{tabular}
+    }
+\end{frame}
+
+
+%------------------- Slide 9 -------------------
+\begin{frame}{Ưu và nhược điểm của LoRA}
+    \textbf{Ưu điểm:}
+    \begin{itemize}
+        \item Hiệu quả tham số cao (<1\% tham số huấn luyện).
+        \item Không tăng độ trễ suy luận.
+        \item Huấn luyện nhanh hơn, tiết kiệm bộ nhớ.
+        \item Dễ kết hợp với Adapter hoặc Prefix Tuning.
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{Hạn chế:}
+    \begin{itemize}
+        \item Giả định không gian hạng thấp có thể không đúng cho mọi tác vụ.
+        \item Giá trị \(r\) cần được chọn phù hợp.
+        \item Với mô hình nhỏ (như BERT-base), lợi ích không đáng kể.
+    \end{itemize}
+\end{frame}
+
+\section{Thực nghiệm và đánh giá}
+%------------------- Slide 10 -------------------
+\begin{frame}{Mục tiêu thực nghiệm}
+    \begin{itemize}
+        \item Đánh giá LoRA so với Full Fine-Tuning trên bài toán sinh ngôn ngữ tự nhiên.
+        \item Dữ liệu: \textbf{E2E NLG Challenge} — 50.000 cặp (MR, câu mô tả).
+        \item Câu hỏi chính:
+        \begin{itemize}
+            \item LoRA có đạt hiệu năng tương đương Full Fine-Tuning?
+            \item Mức tiết kiệm tài nguyên ra sao?
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+%------------------- Slide 11 -------------------
+\begin{frame}{Thiết lập thực nghiệm}
+    \textbf{Mô hình:} GPT-2 Medium (355M tham số).\\[0.5em]
+    \textbf{Cấu hình:}
+    \begin{itemize}
+        \item Optimizer: AdamW, lr = 2e-4, batch size = 4
+        \item Epochs = 5, dropout = 0.1
+        \item LoRA rank = 4, scaling factor = 32
+        \item Chỉ tinh chỉnh \textbf{0.3\% tham số mô hình}
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{Đánh giá:} BLEU, NIST, METEOR, ROUGE-L, CIDEr.
+\end{frame}
+
+\begin{frame}{So sánh Train Loss giữa các mô hình}
+\begin{columns}[c]
+    %--- Cột trái: Full fine-tuning ---
+    \begin{column}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=0.55\textheight, keepaspectratio]{img/full_train_loss.png}
+        \vspace{0.3em}
+        {\scriptsize Train Loss của mô hình Full Fine-tuning}
+    \end{column}
+    
+    %--- Cột phải: LoRA ---
+    \begin{column}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=0.55\textheight, keepaspectratio]{img/lora_train_loss.png}
+        \vspace{0.3em}
+        {\scriptsize Train Loss của mô hình LoRA}
+    \end{column}
+\end{columns}
+
+\small
+\begin{itemize}
+    \item Cả hai mô hình đều hội tụ sau khoảng 3–4 epoch.  
+    \item LoRA có đường loss mượt hơn, giảm nhanh hơn ở giai đoạn đầu.  
+    \item Điều này cho thấy việc giới hạn không gian hạng thấp giúp quá trình tối ưu ổn định hơn.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{So sánh Validation Loss giữa các mô hình}
+\begin{columns}[c]
+    %--- Cột trái: Full fine-tuning ---
+    \begin{column}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=0.55\textheight, keepaspectratio]{img/full_valid_loss.png}
+        \vspace{0.3em}
+        {\scriptsize Validation Loss của mô hình Full Fine-tuning}
+    \end{column}
+    
+    %--- Cột phải: LoRA ---
+    \begin{column}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=0.55\textheight, keepaspectratio]{img/lora_valid_loss.png}
+        \vspace{0.3em}
+        {\scriptsize Validation Loss của mô hình LoRA}
+    \end{column}
+\end{columns}
+
+\small
+\begin{itemize}
+    \item Validation Loss của LoRA giảm nhanh và ổn định hơn.  
+    \item Full fine-tuning có xu hướng dao động và dừng sớm hơn → dấu hiệu overfitting.  
+    \item Kết luận: LoRA giúp mô hình tổng quát hóa tốt hơn trên tập kiểm thử.
+\end{itemize}
+\end{frame}
+
+
+%------------------- Slide 12 -------------------
+\begin{frame}{Kết quả định lượng}
+    \begin{table}[h]
+    \centering
+    \footnotesize
+    \begin{tabular}{lcc}
+    \toprule
+    \textbf{Tiêu chí} & \textbf{Full Fine-tuning} & \textbf{LoRA} \\
+    \midrule
+    BLEU & 0.6734 & \textbf{0.6803} \\
+    NIST & 8.5452 & \textbf{8.6419} \\
+    METEOR & 0.4622 & 0.4556 \\
+    ROUGE-L & 0.7033 & 0.7018 \\
+    CIDEr & 2.3843 & \textbf{2.4465} \\
+    \bottomrule
+    \end{tabular}
+    \end{table}
+    \vspace{0.8em}
+    \textbf{Nhận xét:} LoRA đạt hiệu năng tương đương hoặc cao hơn Full Fine-Tuning dù chỉ huấn luyện 0.3\% tham số.
+\end{frame}
+
+%------------------- Slide 13 -------------------
+\begin{frame}{Phân tích và nhận xét}
+    \begin{itemize}
+        \item LoRA hội tụ nhanh hơn, giảm dao động gradient.
+        \item Giúp tránh overfitting và ổn định trên tập validation.
+        \item Kết quả chứng minh: thay đổi trọng số quan trọng chỉ nằm trong không gian hạng thấp.
+    \end{itemize}
+\end{frame}
+
+\section{Kết luận}
+%------------------- Slide 14 -------------------
+\begin{frame}{Kết luận và hướng phát triển}
+    \begin{itemize}
+        \item LoRA là phương pháp tinh chỉnh hiệu quả, tiết kiệm tài nguyên mà vẫn giữ hiệu năng cao.
+        \item Phù hợp với hệ thống có hạn chế phần cứng (GPU nhỏ).
+        \item Hướng mở:
+        \begin{itemize}
+            \item Ứng dụng trên tác vụ tóm tắt, đối thoại, truy xuất thông tin.
+            \item Kết hợp LoRA với Adapter hoặc Prefix Tuning.
+            \item Tối ưu giá trị rank \(r\) và hệ số \(\alpha\).
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[plain]
+    \centering
+    \vspace{2em}
+    {\Huge \textbf{Xin chân thành cảm ơn!}}\\[1em]
+    {\Large Cảm ơn thầy và các anh/chị đã lắng nghe.}\\[2em]
+
+\end{frame}
+
+\end{document}

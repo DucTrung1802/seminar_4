@@ -1,0 +1,23 @@
+\chapter*{Giới thiệu}
+\addcontentsline{toc}{chapter}{Giới thiệu}
+
+Trong bối cảnh các hệ thống thông tin hiện đại đang tạo ra khối lượng dữ liệu khổng lồ mỗi ngày, việc khai thác tri thức từ dữ liệu (data mining) đã trở thành một lĩnh vực nghiên cứu quan trọng và có nhiều ứng dụng thực tiễn. Trong số các kỹ thuật khai phá dữ liệu, khai phá luật kết hợp (association rule mining) là một trong những hướng tiếp cận được quan tâm nhiều nhất bởi khả năng phát hiện các mối quan hệ tiềm ẩn giữa các đối tượng dữ liệu. Những luật kết hợp này không chỉ hỗ trợ mô tả hành vi của người dùng và khách hàng, mà còn mang lại giá trị lớn trong các lĩnh vực như thương mại điện tử, tối ưu hoá bán lẻ, marketing, phân tích rủi ro tài chính và các hệ thống gợi ý thông minh.
+
+Một bài toán trung tâm trong khai phá luật kết hợp là bài toán tìm tập mục thường xuyên (frequent itemset mining). Đây là bước tiền đề quan trọng để từ đó sinh ra các luật kết hợp có ý nghĩa. Tuy nhiên, do không gian tìm kiếm tăng theo cấp số mũ với số lượng mặt hàng và giao dịch, việc khai thác các tập mục thường xuyên đòi hỏi những thuật toán hiệu quả về thời gian và tài nguyên xử lý. Trong lĩnh vực này, ba thuật toán kinh điển và nền tảng được sử dụng rộng rãi nhất là Apriori, AprioriTid và AprioriHybrid. Các thuật toán này không chỉ đặt nền móng cho các phương pháp hiện đại mà còn thể hiện những chiến lược tối ưu hóa quan trọng nhằm giảm số lần quét cơ sở dữ liệu, giảm số lượng ứng viên cần xét và tận dụng tốt hơn tài nguyên bộ nhớ.
+
+Thuật toán \textbf{Apriori} giới thiệu một thuộc tính quan trọng cho phép giảm mạnh số lượng tập ứng viên, dựa trên nguyên tắc rằng một tập mục chỉ có thể là phổ biến khi tất cả các tập con của nó cũng phổ biến. Thuật toán \textbf{AprioriTid} cải thiện hiệu năng ở các vòng lặp sau bằng cách sử dụng một cấu trúc dữ liệu trung gian, tránh việc phải quét lại toàn bộ cơ sở dữ liệu. Trong khi đó, \textbf{AprioriHybrid} kết hợp ưu điểm của cả Apriori và AprioriTid, nhờ đó đạt được hiệu suất tối ưu hơn trong các tình huống thực tế.
+
+Việc nghiên cứu ba thuật toán này không chỉ giúp làm rõ các nguyên lý nền tảng của khai phá luật kết hợp, mà còn cho thấy cách những chiến lược tối ưu hóa khác nhau ảnh hưởng trực tiếp đến hiệu năng thực thi của thuật toán.
+
+Tiểu luận này được thực hiện nhằm mục tiêu:
+\begin{itemize}
+    \item Trình bày tổng quan về khai phá dữ liệu và khai phá luật kết hợp.
+    \item Phân tích chi tiết ba thuật toán Apriori, AprioriTid và AprioriHybrid.
+    \item Minh họa hoạt động của các thuật toán thông qua ví dụ cụ thể.
+    \item Đánh giá và so sánh hiệu năng của các thuật toán trên các tiêu chí lý thuyết.
+    \item Rút ra những nhận xét và định hướng áp dụng phù hợp trong thực tế.
+\end{itemize}
+
+Phạm vi tiểu luận tập trung vào khía cạnh thuật toán và hiệu năng, không đi sâu vào các mở rộng hoặc biến thể hiện đại như FP-Growth, ECLAT hoặc các phương pháp dựa trên cây tiền tố và đồ thị. Tuy nhiên, những thuật toán cổ điển được phân tích trong báo cáo này vẫn giữ vai trò quan trọng trong việc hiểu rõ tư duy thiết kế thuật toán khai phá dữ liệu.
+
+Bố cục của tiểu luận được tổ chức như sau: Chương 1 giới thiệu tổng quan về khai phá dữ liệu và luật kết hợp. Chương 2, Chương 3 và Chương 4 lần lượt phân tích ba thuật toán Apriori, AprioriTid và AprioriHybrid. Chương 5 so sánh hiệu năng các thuật toán và thảo luận các yếu tố ảnh hưởng. Cuối cùng là phần kết luận tổng hợp nội dung và đề xuất hướng phát triển tiếp theo.

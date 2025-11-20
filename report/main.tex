@@ -1,0 +1,131 @@
+\documentclass[fontsize=12pt,a4paper,oneside,DIV=calc, chapterprefix=true]{scrbook} % twoside for draft
+\KOMAoptions{open=any}
+\usepackage{tocloft}
+% Giảm khoảng cách trên/dưới tiêu đề MỤC LỤC
+\renewcommand{\cftbeforetoctitleskip}{-0.5em}
+\renewcommand{\cftaftertoctitleskip}{-0.5em}
+
+\usepackage{float}
+\usepackage{subcaption} % loads the caption package
+\usepackage{graphicx}
+\usepackage{amssymb}
+%\usepackage{babel}
+\usepackage[utf8]{inputenc}
+\inputencoding{latin1}
+\inputencoding{utf8}
+\usepackage[utf8]{vietnam}
+\usepackage{tabto}    
+\usepackage{wrapfig}
+\usepackage{lscape}
+%\usepackage{tipa}
+%\usepackage{amssymb}
+ 
+%\usepackage{subcaption}
+%\usepackage{booktabs}
+\usepackage{mathptmx}	% same Time New Roma
+\usepackage{amsmath}
+%\usepackage{amssymb}
+%\usepackage{amsfonts}
+%\usepackage{ipa}
+%\renewcommand{\rmdefault}{phv} % Arial
+%\renewcommand{\sfdefault}{phv} % Arial
+\usepackage{array}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\usepackage{fancyhdr}
+\usepackage{multirow}
+% \usepackage{algorithm2e}
+\usepackage[unicode]{hyperref}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{float} % để dùng [H]
+\usepackage{amsmath}
+\usepackage{husthesis}
+\usepackage{enumitem}
+\usepackage{longtable}
+\usepackage{array}        % để điều khiển độ rộng cột
+\usepackage{booktabs}     % đường kẻ đẹp
+\usepackage{caption}  
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{cleveref}
+
+
+
+\graphicspath{ {img/} }
+\setcounter{secnumdepth}{2}
+\crname{Chuyên đề 4}
+\ctname{Fast Algorithms\\for Mining Association Rules}
+\cstuname{
+Nguyễn Thị Ngọc Uyên - 23007930\\
+\vspace{0.5em}
+Lý Đức Trung - 23007933\\
+
+}
+
+\csMajor{Khoa học dữ liệu}
+
+\csSupervise{PGS.TS Vũ Tiến Dũng}
+\cttime{2025}
+
+\thesislayout
+
+\begin{document}
+
+\coverpage
+
+\frontmatter
+
+\begin{acknowledgments}
+Bài tiểu luận cuối kỳ này được hoàn thành dưới sự hướng dẫn của thầy PGS.TS. Vũ Tiến Dũng. Chúng em xin bày tỏ lòng biết ơn sâu sắc tới thầy vì sự định hướng và gợi ý đề tài trong quá trình học tập môn học này.
+
+Trong quá trình làm bài tiểu luận này, do kiến thức còn hạn chế nên chúng em không tránh khỏi những thiếu sót. Chúng em mong nhận được những ý kiến đóng góp của thầy và các bạn để có thể rút ra kinh nghiệm, hoàn thiện và phát triển đề tài hơn.
+
+Chúng em xin chân thành cảm ơn!
+
+
+\end{acknowledgments}
+
+\clearpage % ✅ tự động sang trang sau khi kết thúc Lời cảm ơn
+
+\printnomenclature
+
+\tableofcontents
+%\listofsymbols
+% \listoftables
+% \listoffigures
+%\listofalgorithms
+
+
+
+\mainmatter
+
+\fancyhead{}  % Clears all page headers and footers
+% \rhead{\thepage}  % Sets the right side header to show the page number
+% \lhead{}  % Clears the left side page header
+%\fancyfoot[positions]{footer}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\pagestyle{fancy}  % Finally, use the "fancy" page style to implement the FancyHdr headers
+%
+
+
+\input{chapter/chapter1.tex}
+\input{chapter/chapter2.tex}
+\input{chapter/chapter4.tex}
+\input{chapter/chapter5.tex}
+\input{chapter/chapter6.tex}
+\input{chapter/chapter7.tex}
+\input{chapter/chapter8.tex}
+
+
+
+%bibliography{refs}{}
+%bibliographystyle{plain}
+%-	Danh mục TL tham khảo
+%-	Phụ lục (nếu có)
+\nocite{*}
+\bibliographystyle{IEEEtranS}
+\bibliography{ref}
+
+\end{document}

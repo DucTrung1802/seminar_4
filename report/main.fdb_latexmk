@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex main"] 1763652247.97923 "main.aux" "main.bbl" "main" 1763652254.71767 0
+["bibtex main"] 1763657731.85433 "main.aux" "main.bbl" "main" 1763657736.02008 2
   "./ref.bib" 1763650334.62946 0 d41d8cd98f00b204e9800998ecf8427e ""
   "/home/uyen/.miktex/texmfs/install/bibtex/bst/ieeetran/IEEEtranS.bst" 1761399232.16691 61730 614a61a3af01043d45925bdf2bd38471 ""
-  "main.aux" 1763652253.92189 49296 9e627e965c6f03f4c425bb53654ee23b "pdflatex"
+  "main.aux" 1763657735.58464 46626 2d9403f575f1a8708131f133b09ee8f6 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1763652251.15242 "/home/uyen/mining_association_rules/seminar_4/report/main.tex" "main.pdf" "main" 1763652254.71887 2
+["pdflatex"] 1763657734.37985 "/home/uyen/mining_association_rules/seminar_4/report/main.tex" "main.pdf" "main" 1763657736.02037 2
   "/home/uyen/.miktex/texmfs/data/fonts/map/pdftex/pdftex.map" 1761666525.65547 38660 0895334d07f45d3c20dd68c5394ee9f3 ""
   "/home/uyen/.miktex/texmfs/data/fonts/tfm/public/rsfs/rsfs10.tfm" 1761399501.71556 688 37338d6ab346c2f1466b29e195316aa4 ""
   "/home/uyen/.miktex/texmfs/data/miktex/data/le/pdftex/pdflatex.fmt" 1761399297.19616 10120673 094cc0060f849baed24bddb18cf94cea ""
@@ -225,18 +225,18 @@
   "/home/uyen/mining_association_rules/seminar_4/report/main.tex" 1763650334.59804 3508 03173d79b657bd7054b814954cd5895e ""
   "chapter/chapter1.tex" 1763652251.13342 4473 1158aa7fe6baecc2ca5bdf01036ef26b ""
   "chapter/chapter2.tex" 1763650334.18178 9854 4cf675bfb0afb2b076faa4e416845eb4 ""
-  "chapter/chapter4.tex" 1763650334.17786 834 1ab70e4284580084b2e12fed3a4d3944 ""
+  "chapter/chapter4.tex" 1763657731.07508 8269 cf7481fb9ee32ef8a05f50895049ec42 ""
   "chapter/chapter5.tex" 1763650334.19357 852 1f4accbbfeb303a805739d1b1983e2bb ""
   "chapter/chapter6.tex" 1763650334.19749 814 85b83805217046888d759096cbdc8434 ""
   "chapter/chapter7.tex" 1763650334.20535 761 4d7e9588b8b30c8f11033698cfdb0399 ""
   "chapter/chapter8.tex" 1763650334.20142 69 150a29ba1a19e388a7e1003b9625c288 ""
-  "husthesis.sty" 1763650334.48416 4532 0c70b9e2487f15f931777372e9fe3afe ""
+  "husthesis.sty" 1763657301.92511 4523 39305100f3bdce61ae28a0b26bc4b651 ""
   "img/HUS_logo.png" 1763650334.33886 403699 081833ff259ddf8d6553d14b8c88eab7 ""
-  "main.aux" 1763652253.92189 49296 9e627e965c6f03f4c425bb53654ee23b "pdflatex"
-  "main.bbl" 1763652248.1972 879 3823a7cc4084414188a1a57d404f7663 "bibtex main"
+  "main.aux" 1763657735.58464 46626 2d9403f575f1a8708131f133b09ee8f6 "pdflatex"
+  "main.bbl" 1763657732.07267 0 d41d8cd98f00b204e9800998ecf8427e "bibtex main"
   "main.nls" 0 -1 0 ""
   "main.tex" 1763650334.59804 3508 03173d79b657bd7054b814954cd5895e ""
-  "main.toc" 1763652253.94523 9089 29d0f9add4348b5eb66f22b0535c9967 "pdflatex"
+  "main.toc" 1763657735.59607 8543 0482e8f9222bc0ae542c3fc0df87f9ec "pdflatex"
   (generated)
   "main.aux"
   "main.log"

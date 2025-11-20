@@ -18,73 +18,68 @@
 \contentsline {subsection}{\numberline {1.4.3}Mục tiêu của khai phá luật kết hợp}{7}{subsection.1.4.3}%
 \contentsline {section}{\numberline {1.5}Các bài toán con trong khai phá luật kết hợp}{7}{section.1.5}%
 \contentsline {chapter}{\numberline {2}Thuật toán Apriori}{8}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Nguyên lý Apriori}{9}{section.2.1}%
-\contentsline {subsection}{\numberline {2.1.1}Apriori Property}{9}{subsection.2.1.1}%
-\contentsline {subsection}{\numberline {2.1.2}Ý nghĩa và trực giác của thuộc tính}{9}{subsection.2.1.2}%
-\contentsline {section}{\numberline {2.2}Quy trình thuật toán}{9}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}Tìm $L_1$}{9}{subsection.2.2.1}%
-\contentsline {subsection}{\numberline {2.2.2}Sinh ứng viên $C_k$ từ $L_{k-1}$}{9}{subsection.2.2.2}%
-\contentsline {subsection}{\numberline {2.2.3}Join step}{9}{subsection.2.2.3}%
-\contentsline {subsection}{\numberline {2.2.4}Prune step}{9}{subsection.2.2.4}%
-\contentsline {subsection}{\numberline {2.2.5}Duyệt toàn bộ dữ liệu để tính support}{9}{subsection.2.2.5}%
-\contentsline {subsection}{\numberline {2.2.6}Điều kiện dừng thuật toán}{9}{subsection.2.2.6}%
-\contentsline {section}{\numberline {2.3}Ví dụ minh hoạ}{9}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Tập dữ liệu mẫu}{9}{subsection.2.3.1}%
-\contentsline {subsection}{\numberline {2.3.2}Tính $L_1, C_2, L_2$}{9}{subsection.2.3.2}%
-\contentsline {subsection}{\numberline {2.3.3}Sinh $C_3$ và tính $L_3$}{9}{subsection.2.3.3}%
-\contentsline {subsection}{\numberline {2.3.4}Phân tích kết quả ví dụ}{9}{subsection.2.3.4}%
-\contentsline {section}{\numberline {2.4}Đánh giá chi phí thuật toán}{9}{section.2.4}%
-\contentsline {subsection}{\numberline {2.4.1}Số lần quét cơ sở dữ liệu}{9}{subsection.2.4.1}%
-\contentsline {subsection}{\numberline {2.4.2}Kích thước ứng viên}{9}{subsection.2.4.2}%
-\contentsline {subsection}{\numberline {2.4.3}Độ phức tạp thời gian}{9}{subsection.2.4.3}%
-\contentsline {subsection}{\numberline {2.4.4}Ưu điểm và hạn chế}{9}{subsection.2.4.4}%
-\contentsline {chapter}{\numberline {3}Thuật toán AprioriTid}{10}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Động cơ xây dựng AprioriTid}{11}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Hạn chế của Apriori}{11}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}Ý tưởng tối ưu hóa}{11}{subsection.3.1.2}%
-\contentsline {section}{\numberline {3.2}Mô tả thuật toán AprioriTid}{11}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Cấu trúc trung gian $\bar {C}_k$}{11}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}Cách sinh $\bar {C}_k$ từ $\bar {C}_{k-1}$}{11}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}Đếm support không cần quét lại dữ liệu gốc}{11}{subsection.3.2.3}%
-\contentsline {subsection}{\numberline {3.2.4}Loại bỏ dòng TID rỗng để giảm kích thước}{11}{subsection.3.2.4}%
-\contentsline {section}{\numberline {3.3}Ví dụ minh họa AprioriTid}{11}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Xây dựng $\bar {C}_1$}{11}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}Sinh $\bar {C}_2$ và tính support}{11}{subsection.3.3.2}%
-\contentsline {subsection}{\numberline {3.3.3}Thu nhỏ cấu trúc dữ liệu qua từng vòng}{11}{subsection.3.3.3}%
-\contentsline {section}{\numberline {3.4}Phân tích hiệu năng}{11}{section.3.4}%
-\contentsline {subsection}{\numberline {3.4.1}Khi nào AprioriTid nhanh hơn Apriori}{11}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}Khi nào AprioriTid chậm hơn}{11}{subsection.3.4.2}%
-\contentsline {subsection}{\numberline {3.4.3}Ảnh hưởng của minsup}{11}{subsection.3.4.3}%
-\contentsline {subsection}{\numberline {3.4.4}Đánh giá tổng quan}{11}{subsection.3.4.4}%
-\contentsline {chapter}{\numberline {4}Thuật toán AprioriHybrid}{12}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Động cơ phát triển AprioriHybrid}{13}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Nhược điểm của Apriori và AprioriTid}{13}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}Mục tiêu kết hợp hai thuật toán}{13}{subsection.4.1.2}%
-\contentsline {section}{\numberline {4.2}Cách hoạt động của AprioriHybrid}{13}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Giai đoạn 1: Chạy Apriori}{13}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Điều kiện chuyển sang AprioriTid}{13}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.2.3}Giai đoạn 2: Chạy AprioriTid khi $\bar {C}_k$ nhỏ}{13}{subsection.4.2.3}%
-\contentsline {subsection}{\numberline {4.2.4}Pseudo-code tổng quát}{13}{subsection.4.2.4}%
-\contentsline {section}{\numberline {4.3}Ví dụ minh họa}{13}{section.4.3}%
-\contentsline {subsection}{\numberline {4.3.1}Minh họa điểm chuyển đổi (switching point)}{13}{subsection.4.3.1}%
-\contentsline {subsection}{\numberline {4.3.2}So sánh thời gian chạy giữa ba thuật toán}{13}{subsection.4.3.2}%
-\contentsline {section}{\numberline {4.4}Đánh giá hiệu quả}{13}{section.4.4}%
-\contentsline {subsection}{\numberline {4.4.1}Thực nghiệm từ tài liệu gốc}{13}{subsection.4.4.1}%
-\contentsline {subsection}{\numberline {4.4.2}Ưu điểm trong minsup thấp}{13}{subsection.4.4.2}%
-\contentsline {subsection}{\numberline {4.4.3}Hạn chế và tình huống không tối ưu}{13}{subsection.4.4.3}%
-\contentsline {chapter}{\numberline {5}Đánh giá hiệu năng và so sánh các thuật toán}{14}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Các yếu tố ảnh hưởng hiệu năng}{15}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Số lượng giao dịch |D|}{15}{subsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.1.2}Số lượng mặt hàng |I|}{15}{subsection.5.1.2}%
-\contentsline {subsection}{\numberline {5.1.3}Độ dài trung bình giao dịch |T|}{15}{subsection.5.1.3}%
-\contentsline {subsection}{\numberline {5.1.4}Kích thước ứng viên và số vòng lặp}{15}{subsection.5.1.4}%
-\contentsline {section}{\numberline {5.2}So sánh Apriori, AprioriTid và AprioriHybrid}{15}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Số lần quét CSDL}{15}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {5.2.2}Tốc độ thực thi}{15}{subsection.5.2.2}%
-\contentsline {subsection}{\numberline {5.2.3}Sử dụng bộ nhớ}{15}{subsection.5.2.3}%
-\contentsline {subsection}{\numberline {5.2.4}Độ hiệu quả khi minsup thấp / cao}{15}{subsection.5.2.4}%
-\contentsline {section}{\numberline {5.3}Kết quả thực nghiệm và biểu đồ minh hoạ}{15}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}Biểu đồ số ứng viên theo vòng}{15}{subsection.5.3.1}%
-\contentsline {subsection}{\numberline {5.3.2}Biểu đồ thời gian chạy ba thuật toán}{15}{subsection.5.3.2}%
-\contentsline {subsection}{\numberline {5.3.3}Nhận xét kết quả}{15}{subsection.5.3.3}%
-\contentsline {chapter}{Kết luận}{16}{chapter*.2}%
+\contentsline {section}{\numberline {2.1}Giới thiệu}{8}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Nguyên lý cốt lõi}{8}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Tính chất cơ bản của Apriori}{8}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Ý nghĩa của nguyên lý}{9}{subsection.2.2.2}%
+\contentsline {section}{\numberline {2.3}Quy trình hoạt động của Apriori}{9}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Giả mã thuật toán}{10}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Sinh tập ứng viên}{10}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Bước Join}{10}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Bước Prune}{11}{subsection.2.5.2}%
+\contentsline {section}{\numberline {2.6}Ví dụ minh họa}{11}{section.2.6}%
+\contentsline {subsection}{\numberline {2.6.1}Bước 1: Tìm frequent 1-itemsets}{11}{subsection.2.6.1}%
+\contentsline {subsection}{\numberline {2.6.2}Bước 2: Sinh frequent 2-itemsets}{12}{subsection.2.6.2}%
+\contentsline {subsection}{\numberline {2.6.3}Bước 3: Sinh frequent 3-itemsets}{12}{subsection.2.6.3}%
+\contentsline {subsection}{\numberline {2.6.4}Kết quả}{13}{subsection.2.6.4}%
+\contentsline {section}{\numberline {2.7}Kết luận}{13}{section.2.7}%
+\contentsline {chapter}{\numberline {3}Thuật toán AprioriTid}{14}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Động cơ xây dựng AprioriTid}{15}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Hạn chế của Apriori}{15}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Ý tưởng tối ưu hóa}{15}{subsection.3.1.2}%
+\contentsline {section}{\numberline {3.2}Mô tả thuật toán AprioriTid}{15}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Cấu trúc trung gian $\bar {C}_k$}{15}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Cách sinh $\bar {C}_k$ từ $\bar {C}_{k-1}$}{15}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Đếm support không cần quét lại dữ liệu gốc}{15}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Loại bỏ dòng TID rỗng để giảm kích thước}{15}{subsection.3.2.4}%
+\contentsline {section}{\numberline {3.3}Ví dụ minh họa AprioriTid}{15}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Xây dựng $\bar {C}_1$}{15}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Sinh $\bar {C}_2$ và tính support}{15}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Thu nhỏ cấu trúc dữ liệu qua từng vòng}{15}{subsection.3.3.3}%
+\contentsline {section}{\numberline {3.4}Phân tích hiệu năng}{15}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Khi nào AprioriTid nhanh hơn Apriori}{15}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Khi nào AprioriTid chậm hơn}{15}{subsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.4.3}Ảnh hưởng của minsup}{15}{subsection.3.4.3}%
+\contentsline {subsection}{\numberline {3.4.4}Đánh giá tổng quan}{15}{subsection.3.4.4}%
+\contentsline {chapter}{\numberline {4}Thuật toán AprioriHybrid}{16}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Động cơ phát triển AprioriHybrid}{17}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Nhược điểm của Apriori và AprioriTid}{17}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Mục tiêu kết hợp hai thuật toán}{17}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}Cách hoạt động của AprioriHybrid}{17}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Giai đoạn 1: Chạy Apriori}{17}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Điều kiện chuyển sang AprioriTid}{17}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Giai đoạn 2: Chạy AprioriTid khi $\bar {C}_k$ nhỏ}{17}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Pseudo-code tổng quát}{17}{subsection.4.2.4}%
+\contentsline {section}{\numberline {4.3}Ví dụ minh họa}{17}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Minh họa điểm chuyển đổi (switching point)}{17}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}So sánh thời gian chạy giữa ba thuật toán}{17}{subsection.4.3.2}%
+\contentsline {section}{\numberline {4.4}Đánh giá hiệu quả}{17}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Thực nghiệm từ tài liệu gốc}{17}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Ưu điểm trong minsup thấp}{17}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}Hạn chế và tình huống không tối ưu}{17}{subsection.4.4.3}%
+\contentsline {chapter}{\numberline {5}Đánh giá hiệu năng và so sánh các thuật toán}{18}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Các yếu tố ảnh hưởng hiệu năng}{19}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Số lượng giao dịch |D|}{19}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Số lượng mặt hàng |I|}{19}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Độ dài trung bình giao dịch |T|}{19}{subsection.5.1.3}%
+\contentsline {subsection}{\numberline {5.1.4}Kích thước ứng viên và số vòng lặp}{19}{subsection.5.1.4}%
+\contentsline {section}{\numberline {5.2}So sánh Apriori, AprioriTid và AprioriHybrid}{19}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Số lần quét CSDL}{19}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Tốc độ thực thi}{19}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Sử dụng bộ nhớ}{19}{subsection.5.2.3}%
+\contentsline {subsection}{\numberline {5.2.4}Độ hiệu quả khi minsup thấp / cao}{19}{subsection.5.2.4}%
+\contentsline {section}{\numberline {5.3}Kết quả thực nghiệm và biểu đồ minh hoạ}{19}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Biểu đồ số ứng viên theo vòng}{19}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Biểu đồ thời gian chạy ba thuật toán}{19}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.3.3}Nhận xét kết quả}{19}{subsection.5.3.3}%
+\contentsline {chapter}{Kết luận}{20}{chapter*.2}%

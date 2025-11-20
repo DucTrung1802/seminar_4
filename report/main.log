@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.10.25)  20 NOV 2025 23:56
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.11.21)  21 NOV 2025 00:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1721,6 +1721,16 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 73.
 LaTeX Font Info:    ... okay on input line 73.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 73.
 LaTeX Font Info:    ... okay on input line 73.
+Package scrbase Info: activating english \partname on input line 73.
+Package scrbase Info: activating english \chaptername on input line 73.
+Package scrbase Info: activating english \appendixname on input line 73.
+Package scrbase Info: activating english \figurename on input line 73.
+Package scrbase Info: activating english \tablename on input line 73.
+Package scrbase Info: activating english \contentsname on input line 73.
+Package scrbase Info: activating english \listfigurename on input line 73.
+Package scrbase Info: activating english \listtablename on input line 73.
+Package scrbase Info: activating english \bibname on input line 73.
+Package scrbase Info: activating english \indexname on input line 73.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: longtable package is loaded.
@@ -1765,4 +1775,252 @@ Package hyperref Info: Link coloring OFF on input line 73.
 * v-part:(T,H,B)=(85.35826pt, 674.33032pt, 85.35826pt)
 * \paperwidth=597.50787pt
 * \paperheight=845.04684pt
-* \t
+* \textwidth=441.01773pt
+* \textheight=674.33032pt
+* \oddsidemargin=27.31465pt
+* \evensidemargin=27.31465pt
+* \topmargin=-26.78673pt
+* \headheight=18.125pt
+* \headsep=21.75pt
+* \topskip=12.0pt
+* \footskip=50.75pt
+* \marginparwidth=66.38977pt
+* \marginparsep=12.8401pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+<img/HUS_logo.png, id=6, 553.06625pt x 736.7525pt>
+File: img/HUS_logo.png Graphic file (type png)
+<use img/HUS_logo.png>
+Package pdftex.def Info: img/HUS_logo.png  used on input line 75.
+(pdftex.def)             Requested size: 106.69783pt x 142.13164pt.
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.75 \coverpage
+               
+? 
+
+
+[1
+
+]
+Overfull \vbox (51.21495pt too high) has occurred while \output is active []
+
+
+
+[2{/home/uyen/.miktex/texmfs/data/fonts/map/pdftex/pdftex.map}{/home/uyen/.mikt
+ex/texmfs/install/fonts/enc/dvips/vntex/t5.enc} <./img/HUS_logo.png (PNG copy)>
+]
+Overfull \hbox (1.09561pt too wide) in paragraph at lines 80--81
+[]\T5/ptm/m/n/12 B†i ti∫u lu™n cuËi k˝ n†y ^^_˜Òc ho†n th†nh d˜Ói s¸ h˜Óng d®n 
+cıa th¶y PGS.TS.
+ []
+
+
+
+[1
+
+
+
+]
+No file main.nls.
+LaTeX Font Info:    Trying to load font information for T5+cmss on input line 9
+3.
+(/home/uyen/.miktex/texmfs/install/tex/latex/vntex/t5cmss.fd
+File: t5cmss.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+) (main.toc
+LaTeX Font Info:    Trying to load font information for OT1+ztmcm on input line
+ 1.
+
+(/home/uyen/.miktex/texmfs/install/tex/latex/psnfss/ot1ztmcm.fd
+File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
+)
+LaTeX Font Info:    Trying to load font information for OML+ztmcm on input line
+ 1.
+
+(/home/uyen/.miktex/texmfs/install/tex/latex/psnfss/omlztmcm.fd
+File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
+)
+LaTeX Font Info:    Trying to load font information for OMS+ztmcm on input line
+ 1.
+
+(/home/uyen/.miktex/texmfs/install/tex/latex/psnfss/omsztmcm.fd
+File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
+)
+LaTeX Font Info:    Trying to load font information for OMX+ztmcm on input line
+ 1.
+
+(/home/uyen/.miktex/texmfs/install/tex/latex/psnfss/omxztmcm.fd
+File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
+)
+LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 1
+.
+
+(/home/uyen/.miktex/texmfs/install/tex/latex/psnfss/ot1ptm.fd
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+)
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1.
+
+
+[2
+
+])
+\tf@toc=\write5
+\openout5 = `main.toc'.
+
+
+
+[3] (chapter/chapter1.tex
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.11 
+      [1
+
+
+]
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
+4.
+ (/home/uyen/.miktex/texmfs/install/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+))
+(chapter/chapter2.tex
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.1 \chapter
+            {T·ªïng quan v·ªÅ khai ph√° d·ªØ li·ªáu v√† lu·∫≠t k·∫øt h·ª£p}
+[2{/home/uyen/.miktex/texmfs/install/fonts/enc/dvips/base/8r.enc}]
+chapter 1.
+
+
+[3
+
+]
+Overfull \hbox (9.1159pt too wide) in paragraph at lines 24--25
+[]\T5/ptm/b/n/12 Khai ph° lu™t k∏t hÒp (As-so-ci-a-tion Rule Min-ing): \T5/ptm/
+m/n/12 Tºm c°c m®u quan hª d§ng ^^Pn∏u^^Uthº^^Q
+ []
+
+
+
+[4]
+
+[5]
+
+[6]
+LaTeX Font Info:    Trying to load font information for T5+cmtt on input line 1
+23.
+ (/home/uyen/.miktex/texmfs/install/tex/latex/vntex/t5cmtt.fd
+File: t5cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+))
+(chapter/chapter4.tex
+
+[7]
+chapter 2.
+
+
+[8
+
+]
+
+[9]
+Overfull \hbox (9.64722pt too wide) in paragraph at lines 67--67
+[]\T5/cmtt/m/n/12 8.      Lk = t™p c°c ˘ng vi∂n trong Ck c‚ ^^_Î hÈ trÒ khÊng n
+h‰ hÏn minsup.[] 
+ []
+
+
+
+[10]
+
+[11]
+
+[12]) (chapter/chapter5.tex
+
+[13]
+chapter 3.
+) (chapter/chapter6.tex
+
+[14
+
+]
+chapter 4.
+) (chapter/chapter7.tex
+
+[15
+
+]
+chapter 5.
+) (chapter/chapter8.tex
+
+[16
+
+]
+
+[17]) (main.bbl
+
+[18
+
+]
+
+LaTeX Warning: Empty `thebibliography' environment or \BreakBibliography
+               before end of `thebibliography' environment on input line 24.
+
+)
+
+[19
+
+] (main.aux)
+ ***********
+LaTeX2e <2025-06-01> patch level 1
+L3 programming layer <2025-09-02>
+ ***********
+ ) 
+Here is how much of TeX's memory you used:
+ 30561 strings out of 469993
+ 587817 string characters out of 5477444
+ 1107346 words of memory out of 5000000
+ 58375 multiletter control sequences out of 15000+600000
+ 683902 words of font info for 102 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 108i,12n,107p,11231b,568s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</home/uyen/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
+</home/uyen/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmr10.pfb></h
+ome/uyen/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy10.pfb></hom
+e/uyen/.miktex/texmfs/install/fonts/type1/vntex/urwvn/utmb8v.pfb></home/uyen/.m
+iktex/texmfs/install/fonts/type1/urw/times/utmr8a.pfb></home/uyen/.miktex/texmf
+s/install/fonts/type1/vntex/urwvn/utmr8v.pfb></home/uyen/.miktex/texmfs/install
+/fonts/type1/urw/times/utmri8a.pfb></home/uyen/.miktex/texmfs/install/fonts/typ
+e1/vntex/urwvn/utmri8v.pfb></home/uyen/.miktex/texmfs/install/fonts/type1/vntex
+/vnr/vntt12.pfb>
+Output written on main.pdf (24 pages, 617014 bytes).
+PDF statistics:
+ 447 PDF objects out of 1000 (max. 8388607)
+ 84 named destinations out of 1000 (max. 500000)
+ 442 words of extra memory for PDF output out of 10000 (max. 10000000)
+

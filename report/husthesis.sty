@@ -43,6 +43,10 @@
 \makenomenclature
 \renewcommand{\nomname}{Danh sách từ viết tắt}
 
+ 
+
+ 
+
 \newcommand{\@sdeptname}{KHOA TOÁN - CƠ - TIN HỌC}
 \newcommand{\csdeptname}[1]{\renewcommand{\@sdeptname}{#1}}
 
@@ -72,14 +76,10 @@
 \def\coverpage{
 
 \pagestyle{empty}
-% \setlength{\oddsidemargin}{0cm}
-% \addtolength{\voffset}{-2.5cm}
-% \addtolength{\textwidth}{-2cm}
 
 % \fbox{
 \begin{minipage}[b][25.5cm][t]{15cm}
 \begin{tikzpicture}[remember picture, overlay]
-%   \draw[line width = 4pt] ($(current page.north west) + (1in,-1in)$) rectangle ($(current page.south east) + (-1in,1in)$);
 \draw [line width=1pt]
     ($ (current page.north west) + (3.0cm,-2.0cm) $)
     rectangle
@@ -125,20 +125,9 @@ TRƯỜNG ĐẠI HỌC KHOA HỌC TỰ NHIÊN\\
 
 }
 
+
 \def\makeprintversion{}
 
-%% Remember to load babel before loading this package or define the command \abstractname!
-%\makeatletter
-%\newenvironment{abstract}{
-%  \titlepage
-%  \null\vfil
-%  \@beginparpenalty\@lowpenalty
-%  \begin{center}
-%	\bfseries Tóm tắt nội dung
-%	\@endparpenalty\@M
-%  \end{center}}
-% {\par\vfil\null\endtitlepage}
-%\makeatother
 
 \makeatletter
 \newenvironment{acknowledgments}{
@@ -151,27 +140,3 @@ TRƯỜNG ĐẠI HỌC KHOA HỌC TỰ NHIÊN\\
 	\quotation
   }{}
 \makeatother
-
-% \makeatletter
-% \newenvironment{acknowledgments}{
-% 	\titlepage \null\vfil
-% 	\small
-% 	\begin{center}
-% 	  {\bfseries Lời cảm ơn\vspace{-.5em}\vspace{\z@}}
-% 	\end{center}
-% 	\quotation
-%   }{}
-% \makeatother
-% Declaration
-%\makeatletter
-%\newenvironment{declaration}{
-%	\small
-%	\begin{center}
-%	  {\bfseries Lời cam đoan\vspace{-.5em}\vspace{\z@}}
-%	\end{center}
-%	\quotation
-%  }{}
-%\makeatother	  
-
-% \renewcommand\lstlistingname{Algorithm}
-% \renewcommand\lstlistlistingname{Algorithms}

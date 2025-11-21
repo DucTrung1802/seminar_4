@@ -13,13 +13,13 @@ Khi |I| lớn, không gian ứng viên có thể bùng nổ (combinatorial explo
 
 3. Độ dài trung bình giao dịch (T)
 
-Các giao dịch dài hơn làm tăng khả năng tạo ra nhiều tập k-mục tiềm năng → nhiều ứng viên hơn → thời gian kiểm tra hỗ trợ (support counting) lâu hơn.
+Các giao dịch dài hơn làm tăng khả năng tạo ra nhiều tập k-mục tiềm năng $\rightarrow$ nhiều ứng viên hơn $\rightarrow$ thời gian kiểm tra hỗ trợ (support counting) lâu hơn.
 
 4. Ngưỡng hỗ trợ tối thiểu (minsup)
 
-minsup cao → ít tập thường xuyên → ít vòng lặp → chạy nhanh
+minsup cao $\rightarrow$ ít tập thường xuyên $\rightarrow$ ít vòng lặp $\rightarrow$ chạy nhanh
 
-minsup thấp → sinh ra rất nhiều ứng viên → thuật toán có thể chậm mạnh hoặc tốn nhiều bộ nhớ
+minsup thấp $\rightarrow$ sinh ra rất nhiều ứng viên $\rightarrow$ thuật toán có thể chậm mạnh hoặc tốn nhiều bộ nhớ
 
 5. Số lượng ứng viên sinh ra trong mỗi vòng lặp
 
@@ -92,7 +92,7 @@ Bảng~\ref{tab:dataset-config}.
 \section{So sánh Apriori, AprioriTid và AprioriHybrid}
 \subsection{Số lần quét CSDL}
 
-Apriori: mỗi vòng lặp cần 1 lần quét lại toàn bộ CSDL → rất tốn chi phí khi số vòng lặp lớn.
+Apriori: mỗi vòng lặp cần 1 lần quét lại toàn bộ CSDL $\rightarrow$ rất tốn chi phí khi số vòng lặp lớn.
 
 AprioriTid: sau vòng đầu tiên, không cần quét CSDL nữa. Thuật toán chỉ làm việc trên bảng ID-list, giúp giảm chi phí I/O.
 
@@ -102,7 +102,7 @@ Giai đoạn đầu dùng Apriori (khi ID-list còn lớn).
 
 Khi kích thước ID-list nhỏ hơn CSDL gốc thì chuyển sang AprioriTid.
 
-→ Về lý thuyết: AprioriTid ≤ Hybrid ≤ Apriori (về số lần đọc CSDL).
+$\rightarrow$ Về lý thuyết: AprioriTid $\le$ Hybrid $\le$ Apriori (về số lần đọc CSDL).
 
 
 
@@ -115,7 +115,7 @@ AprioriTid: sử dụng danh sách ID-list nên việc kiểm tra hỗ trợ nha
 
 Hybrid: giảm chi phí ở những vòng sâu (vòng 3 trở đi).
 
-Nhược điểm AprioriTid: ID-list ban đầu rất lớn → tốn bộ nhớ.
+Nhược điểm AprioriTid: ID-list ban đầu rất lớn $\rightarrow$ tốn bộ nhớ.
 
 
 
@@ -128,8 +128,8 @@ Tốc độ phụ thuộc vào:
     \item Số lượng ứng viên sinh ra
     \item Chi phí đọc/ghi dữ liệu
     \item Kết luận thường gặp:
-    \item minsup cao → cả ba thuật toán đều nhanh
-    \item minsup thấp → Apriori chậm nhất, AprioriTid hoặc Hybrid tốt hơn tùy dataset
+    \item minsup cao $\rightarrow$ cả ba thuật toán đều nhanh
+    \item minsup thấp $\rightarrow$ Apriori chậm nhất, AprioriTid hoặc Hybrid tốt hơn tùy dataset
 \end{itemize}
 
 
@@ -149,11 +149,11 @@ Hybrid: dùng nhiều bộ nhớ ở giai đoạn chuyển tiếp nhưng nhìn c
 \subsection{Ảnh hưởng của minsup (thấp / cao)}
 
 minsup cao
-→ ít ứng viên → cả 3 thuật toán chạy nhanh → Apriori có thể ngang bằng hoặc nhanh hơn do không tốn ID-list.
+$\rightarrow$ ít ứng viên $\rightarrow$ cả 3 thuật toán chạy nhanh $\rightarrow$ Apriori có thể ngang bằng hoặc nhanh hơn do không tốn ID-list.
 
 minsup thấp
-→ nhiều ứng viên → Apriori chậm nhất vì phải quét lại CSDL.
-→ AprioriTid và Hybrid vượt trội hơn, đặc biệt khi số vòng lặp lớn.
+$\rightarrow$ nhiều ứng viên $\rightarrow$ Apriori chậm nhất vì phải quét lại CSDL.
+$\rightarrow$ AprioriTid và Hybrid vượt trội hơn, đặc biệt khi số vòng lặp lớn.
 
 
 
@@ -179,7 +179,6 @@ giúp so sánh tốc độ thực thi, số lượng ứng viên và mức sử 
 % =======================
 % BẢNG 1
 % =======================
-\subsection{Bảng tổng hợp số lượng ứng viên và thời gian chạy theo thuật toán (bảng 1)}
 
 \begin{figure}[H]
     \centering
@@ -191,7 +190,6 @@ giúp so sánh tốc độ thực thi, số lượng ứng viên và mức sử 
 % =======================
 % BẢNG 2
 % =======================
-\subsection{Bảng tổng hợp số lượng ứng viên và thời gian chạy theo thuật toán (bảng 2)}
 
 \begin{figure}[H]
     \centering
@@ -203,7 +201,6 @@ giúp so sánh tốc độ thực thi, số lượng ứng viên và mức sử 
 % =======================
 % HÌNH 1
 % =======================
-\subsection{Biểu đồ số lượng ứng viên theo từng vòng}
 
 \begin{figure}[H]
     \centering
@@ -215,7 +212,6 @@ giúp so sánh tốc độ thực thi, số lượng ứng viên và mức sử 
 % =======================
 % HÌNH 2
 % =======================
-\subsection{Biểu đồ thời gian thực thi của ba thuật toán}
 
 \begin{figure}[H]
     \centering

@@ -1,0 +1,16 @@
+\chapter*{Kết luận}
+\addcontentsline{toc}{chapter}{Kết luận}
+
+
+Trong luận văn này, chúng em đã tiến hành nghiên cứu, phân tích và đánh giá hiệu năng của ba thuật toán khai thác tập mục thường xuyên dựa trên Apriori, bao gồm \textit{Apriori}, \textit{AprioriTid} và \textit{AprioriHybrid}. Trên cơ sở khảo sát lý thuyết và thực nghiệm trên nhiều tập dữ liệu tổng hợp với các đặc trưng khác nhau, một số kết luận quan trọng đã được rút ra như sau.
+
+\begin{itemize}
+    \item Thứ nhất, thuật toán Apriori mặc dù đơn giản và dễ triển khai nhưng gặp hạn chế lớn về số lần quét cơ sở dữ liệu và chi phí sinh ứng viên, đặc biệt khi giá trị \textit{minsup} thấp hoặc số lượng mặt hàng lớn. Tuy nhiên, Apriori vẫn là lựa chọn phù hợp cho các bài toán quy mô vừa hoặc môi trường tài nguyên hạn chế.
+    \item Thứ hai, AprioriTid thể hiện ưu điểm rõ rệt trong các vòng lặp sau, nhờ loại bỏ việc truy xuất trực tiếp vào cơ sở dữ liệu và thay thế bằng cấu trúc bảng ID-list. Điều này giúp cải thiện tốc độ khi số lượng ứng viên tăng mạnh, nhưng đi kèm mức sử dụng bộ nhớ cao hơn ở các vòng đầu.
+    \item Thứ ba, thuật toán AprioriHybrid cho thấy sự cân bằng hiệu quả giữa hai phương pháp trên. Việc chuyển đổi từ Apriori sang AprioriTid tại thời điểm thích hợp giúp tối ưu hoá cả thời gian xử lý lẫn mức tiêu thụ bộ nhớ. Nhờ đó, AprioriHybrid đạt hiệu năng tốt nhất trong hầu hết các kịch bản thực nghiệm của đề tài.
+\end{itemize}   
+
+
+Ngoài việc so sánh hiệu năng, luận văn cũng chỉ ra các hạn chế vốn có của họ thuật toán Apriori, đặc biệt trong bối cảnh dữ liệu lớn và yêu cầu tính toán theo thời gian thực. Từ đó, một số hướng cải thiện đã được đề xuất, bao gồm sử dụng các thuật toán không sinh ứng viên, khai thác tính song song, tối ưu hoá cấu trúc dữ liệu và tích hợp các phương pháp học máy để giảm không gian tìm kiếm.
+Trong tương lai, các nghiên cứu có thể mở rộng theo các hướng: đánh giá trên dữ liệu thực tế quy mô lớn, áp dụng trên môi trường phân tán như Spark hoặc Hadoop, hoặc kết hợp với các mô hình dự đoán nhằm nâng cao chất lượng khai thác tập mục và luật kết hợp. Những cải tiến này hứa hẹn mang lại hiệu quả cao hơn, đáp ứng tốt hơn nhu cầu phân tích dữ liệu trong các hệ thống hiện đại.
+Tóm lại, kết quả nghiên cứu trong luận văn đã cung cấp cái nhìn toàn diện về đặc điểm, ưu điểm, hạn chế và hiệu năng của ba thuật toán Apriori, AprioriTid và AprioriHybrid. Các kết luận thu được không chỉ giúp lựa chọn thuật toán phù hợp cho từng loại bài toán mà còn là cơ sở cho các hướng nghiên cứu tiếp theo trong lĩnh vực khai phá dữ liệu.

@@ -1,141 +1,198 @@
-\chapter{Tổng quan về khai phá dữ liệu và luật kết hợp}
+1\chapter{Thuật toán Apriori}
 
-\section{Tổng quan về khai phá dữ liệu}
+\section{Giới thiệu}
 
-\subsection{Khái niệm khai phá dữ liệu}
-Khai phá dữ liệu (Data Mining) là quá trình phát hiện các mẫu, quy luật hoặc tri thức tiềm ẩn trong các tập dữ liệu lớn, phức tạp và thường khó phân tích bằng các phương pháp thống kê truyền thống. Đây là một giai đoạn quan trọng trong quy trình khám phá tri thức từ dữ liệu (Knowledge Discovery in Databases – KDD), bao gồm các bước như làm sạch dữ liệu, tích hợp, lựa chọn dữ liệu, khai phá và đánh giá tri thức. Khai phá dữ liệu kết hợp nhiều kỹ thuật từ thống kê, học máy, hệ cơ sở dữ liệu và trí tuệ nhân tạo nhằm rút ra thông tin hữu ích phục vụ cho việc ra quyết định.
+Thuật toán Apriori là một trong những phương pháp quan trọng nhất trong khai phá dữ liệu để tìm các tập mục thường xuyên (frequent itemsets) và sinh luật kết hợp. Mặc dù ra đời từ rất sớm, Apriori vẫn là nền tảng cho nhiều thuật toán hiện đại nhờ vào cơ chế sinh ứng viên theo từng mức và khả năng loại bỏ mạnh mẽ các tổ hợp không cần thiết. Ý tưởng cốt lõi của Apriori dựa trên một tính chất đặc biệt liên quan đến mối quan hệ giữa một tập và các tập con của nó. Tính chất này giúp giảm đáng kể số lượng ứng viên, khiến cho bài toán trở nên khả thi ngay cả với tập dữ liệu có kích thước lớn.
 
-\subsection{Vai trò của khai phá dữ liệu}
-Trong thời đại dữ liệu lớn (Big Data), các tổ chức và doanh nghiệp thu thập dữ liệu từ nhiều nguồn khác nhau như giao dịch thương mại điện tử, mạng xã hội, hệ thống cảm biến hay dữ liệu tài chính. Việc phân tích dữ liệu này mang lại nhiều giá trị:
+Chương này trình bày chi tiết nguyên lý, quy trình hoạt động, cách sinh ứng viên, cơ chế loại bỏ (prune), đồng thời cung cấp một ví dụ minh họa cụ thể dựa trên nội dung các slide đã cho.
+
+\section{Nguyên lý cốt lõi}
+
+\subsection{Tính chất cơ bản của Apriori}
+
+Tính chất quan trọng nhất của thuật toán Apriori được phát biểu bằng lời như sau:
+
+\begin{quote}
+Nếu một tập mục kích thước k là một tập mục phổ biến (large itemset), thì mọi tập con có kích thước k-1 của nó cũng phải là tập mục phổ biến.
+\end{quote}
+
+Tính chất này còn được gọi là nguyên lý "đóng xuống" (downward closure). Điều này có một hệ quả quan trọng:
+
 \begin{itemize}
-    \item Hỗ trợ ra quyết định chiến lược dựa trên bằng chứng.
-    \item Dự đoán hành vi khách hàng hoặc xu hướng thị trường.
-    \item Tối ưu hóa hoạt động kinh doanh và giảm thiểu rủi ro.
-    \item Phát hiện các bất thường, gian lận hoặc rủi ro tiềm ẩn.
+    \item Nếu một tập con bất kỳ có kích thước k-1 không phải là tập phổ biến, thì mọi tập có kích thước k chứa tập con đó chắc chắn không phải là tập phổ biến.
 \end{itemize}
-Nhờ những lợi ích này, khai phá dữ liệu trở thành một trong những lĩnh vực cốt lõi của khoa học dữ liệu và công nghệ thông tin.
 
-\subsection{Các nhiệm vụ chính trong khai phá dữ liệu}
-Khai phá dữ liệu bao gồm nhiều nhóm nhiệm vụ khác nhau, trong đó phổ biến nhất là:
+Nhờ đó, thuật toán có thể loại bỏ một lượng rất lớn các ứng viên không cần thiết ngay từ đầu, thay vì phải tốn công đếm độ hỗ trợ trong cơ sở dữ liệu.
+
+\subsection{Ý nghĩa của nguyên lý}
+
+Dựa trên nguyên lý ở trên, Apriori có thể:
+
 \begin{itemize}
-    \item \textbf{Phân lớp (Classification):} Dự đoán nhãn lớp cho dữ liệu mới dựa trên mô hình học từ dữ liệu quá khứ.
-    \item \textbf{Phân cụm (Clustering):} Nhóm các đối tượng tương đồng lại với nhau dựa trên khoảng cách hoặc đặc trưng.
-    \item \textbf{Phát hiện bất thường (Anomaly Detection):} Tìm ra các điểm dữ liệu bất thường trong tập hợp lớn.
-    \item \textbf{Khai phá luật kết hợp (Association Rule Mining):} Tìm các mẫu quan hệ dạng “nếu–thì” giữa các mục xuất hiện trong dữ liệu.
+    \item giảm số ứng viên cần xét trong mỗi vòng lặp,
+    \item tránh xét các tập mục có kích thước lớn khi tập con của chúng đã không đạt ngưỡng hỗ trợ tối thiểu,
+    \item giúp việc sinh frequent itemsets theo mức (level-wise) trở nên khả thi.
 \end{itemize}
-Trong tiểu luận này, chúng ta tập trung vào nhiệm vụ khai phá luật kết hợp, một phương pháp quan trọng và có nhiều ứng dụng trong thực tế.
 
-% --------------------------------------------------------
+Nhờ đó, mặc dù cần quét cơ sở dữ liệu nhiều lần, Apriori vẫn đạt hiệu quả tốt nhờ giảm mạnh không gian tìm kiếm.
 
-\section{Khai phá luật kết hợp}
+\section{Quy trình hoạt động của Apriori}
 
-\subsection{Mục đích của luật kết hợp}
-Khai phá luật kết hợp nhằm tìm ra những quan hệ thường xuyên xuất hiện giữa các đối tượng trong dữ liệu. Một luật kết hợp có dạng:
-\[
-X \Rightarrow Y
-\]
-trong đó $X$ và $Y$ là hai tập mục không giao nhau. Luật được hiểu là: khi các mục trong $X$ xuất hiện trong một giao dịch, thì các mục trong $Y$ cũng có khả năng xuất hiện theo.
+Thuật toán Apriori hoạt động theo phương pháp tìm kiếm theo từng mức. Cụ thể:
 
-Mục tiêu chính của khai phá luật kết hợp là phát hiện các mẫu có ý nghĩa, giúp mô tả hành vi người dùng hoặc xu hướng đồng xuất hiện trong dữ liệu.
+\begin{enumerate}
+    \item Quét cơ sở dữ liệu để tìm tất cả các tập 1-itemset có độ hỗ trợ không nhỏ hơn ngưỡng tối thiểu. Đây là tập L1.
+    \item Ở mỗi vòng lặp tiếp theo, từ tập L(k-1), thuật toán sinh ra tập ứng viên Ck bằng cách kết hợp các phần tử trong L(k-1).
+    \item Quét cơ sở dữ liệu và đếm độ hỗ trợ cho từng ứng viên trong Ck.
+    \item Tập Lk gồm tất cả các ứng viên trong Ck có độ hỗ trợ đạt ngưỡng tối thiểu.
+    \item Thuật toán dừng khi Lk rỗng.
+\end{enumerate}
 
-\subsection{Ứng dụng trong thực tế}
-Luật kết hợp được sử dụng rộng rãi trong nhiều lĩnh vực:
+Kết quả cuối cùng là hợp của tất cả Lk được sinh ra trong quá trình thực thi.
+
+\section{Giả mã thuật toán}
+
+Dưới đây là giả mã tương đương với slide, được viết hoàn toàn bằng văn bản thuần:
+
+\begin{verbatim}
+1.  L1 = tập các 1-itemset phổ biến.
+2.  Với k = 2; khi L(k-1) không rỗng; tăng k lên:
+3.      Sinh tập ứng viên Ck từ L(k-1) bằng hàm apriori-gen.
+4.      Với mỗi giao dịch t trong cơ sở dữ liệu:
+5.          Xác định Ct là tập các ứng viên trong Ck xuất hiện trong t.
+6.          Với mỗi ứng viên c trong Ct:
+7.              Tăng bộ đếm số lần xuất hiện của c.
+8.      Lk = tập các ứng viên trong Ck có độ hỗ trợ không nhỏ hơn minsup.
+9.  Hợp tất cả các Lk là kết quả cần tìm.
+\end{verbatim}
+
+\section{Sinh tập ứng viên}
+
+Quá trình sinh Ck từ L(k-1) gồm hai bước chính: bước nối (join) và bước loại bỏ (prune).
+
+\subsection{Bước Join}
+
+Hai phần tử p và q trong L(k-1) được nối với nhau để tạo thành một ứng viên mới c thuộc Ck nếu:
+
 \begin{itemize}
-    \item \textbf{Bán lẻ và thương mại điện tử:} gợi ý sản phẩm, phân tích giỏ hàng, bố trí hàng hóa.
-    \item \textbf{Ngân hàng và tài chính:} phát hiện hành vi gian lận hoặc các mẫu giao dịch bất thường.
-    \item \textbf{Marketing:} phân tích chiến dịch quảng cáo, xác định nhóm khách hàng tiềm năng.
-    \item \textbf{Y tế:} phát hiện mối liên hệ giữa triệu chứng và bệnh lý.
+    \item p và q trùng nhau ở k-2 phần tử đầu tiên,
+    \item phần tử cuối của p có giá trị nhỏ hơn phần tử cuối của q (để tránh trùng lặp).
 \end{itemize}
-Nhờ khả năng diễn giải trực quan, luật kết hợp đặc biệt hữu ích trong các hệ thống gợi ý và phân tích hành vi tiêu dùng.
 
-\subsection{Ý nghĩa trong hệ thống gợi ý}
-Trong thương mại điện tử, luật kết hợp đóng vai trò quan trọng trong việc xây dựng các mô hình gợi ý kiểu “Frequently Bought Together”. Các luật như:
-\[
-\text{(Laptop)} \Rightarrow \text{(Chuột không dây)}
-\]
-giúp hệ thống tự động đề xuất sản phẩm phù hợp, gia tăng doanh thu và cải thiện trải nghiệm người dùng.
+Mô tả join trong slide:
 
-% --------------------------------------------------------
+\begin{verbatim}
+Chèn vào Ck:
+Chọn p.item1, p.item2, ..., p.item(k-1), q.item(k-1)
+từ L(k-1) p và L(k-1) q
+với điều kiện:
+  p.item1 = q.item1, ..., p.item(k-2) = q.item(k-2)
+  và p.item(k-1) < q.item(k-1)
+\end{verbatim}
 
-\section{Mô hình dữ liệu giỏ hàng (Basket Data)}
+\subsection{Bước Prune}
 
-\subsection{Khái niệm và cấu trúc dữ liệu}
-Dữ liệu giỏ hàng (Basket Data) là mô hình dữ liệu phổ biến trong phân tích giao dịch, trong đó mỗi giao dịch là một tập các mục được mua cùng nhau. Ký hiệu:
-\[
-D = \{T_1, T_2, ..., T_m\}, \quad T_i \subseteq I
-\]
-với $I$ là tập tất cả các mặt hàng.
+Tập ứng viên được tạo ra sẽ tiếp tục được lọc nhờ tính chất Apriori. Một ứng viên c trong Ck sẽ bị loại bỏ nếu tồn tại bất kỳ tập con có kích thước k-1 của c không nằm trong L(k-1).
 
-\subsection{Đặc trưng của dữ liệu giỏ hàng}
-Dữ liệu giỏ hàng có các đặc điểm:
-\begin{itemize}
-    \item Dữ liệu thường rất lớn và thưa.
-    \item Mỗi giao dịch chứa ít mục so với kích thước toàn bộ tập mục.
-    \item Các mục có xu hướng đồng xuất hiện theo nhóm.
-\end{itemize}
-Những đặc điểm này ảnh hưởng trực tiếp đến thiết kế thuật toán tìm tập mục thường xuyên.
+Mô tả prune:
 
-\subsection{Ví dụ minh hoạ dữ liệu giao dịch}
-Một ví dụ đơn giản về dữ liệu giỏ hàng:
+\begin{verbatim}
+Với mỗi itemset c trong Ck:
+    Với mỗi tập con s của c có kích thước k-1:
+        Nếu s không nằm trong L(k-1), loại c khỏi Ck.
+\end{verbatim}
+
+Đây là một trong những bước giúp Apriori vận hành hiệu quả.
+
+\section{Ví dụ minh họa}
+
+Xét cơ sở dữ liệu giao dịch sau:
+
 \begin{center}
-\begin{tabular}{c|l}
+\begin{tabular}{|c|c|}
 \hline
-TID & Mục hàng \\
-\hline
-1 & Bread, Milk, Butter \\
-2 & Bread, Diaper, Beer, Eggs \\
-3 & Milk, Diaper, Beer, Cola \\
-4 & Bread, Milk, Diaper, Beer \\
+TID & Items \\ \hline
+100 & 1   3   4 \\
+200 & 2   3   5 \\
+300 & 1   2   3   5 \\
+400 & 2   5 \\
 \hline
 \end{tabular}
 \end{center}
-Ví dụ này cho thấy các mục như \textit{Bread}, \textit{Milk}, \textit{Diaper} thường xuất hiện cùng nhau, là cơ sở để sinh ra các luật kết hợp.
 
-% --------------------------------------------------------
+Giả sử ngưỡng hỗ trợ tối thiểu minsup là 0.5, tương đương cần xuất hiện ít nhất 2 lần trong 4 giao dịch.
 
-\section{Các khái niệm cơ bản}
+\subsection{Bước 1: Tìm frequent 1-itemsets}
 
+Đếm số lần xuất hiện:
 
-\subsection{Độ hỗ trợ (Support)}
-Độ hỗ trợ phản ánh mức độ phổ biến của luật trong toàn bộ cơ sở dữ liệu giao dịch. Nó được định nghĩa là tỷ lệ phần trăm các giao dịch chứa đồng thời cả $X$ và $Y$:
-\[
-\text{support}(X \Rightarrow Y)
-    = \frac{\text{count}(X \cup Y)}{|D|},
-\]
-với $|D|$ là tổng số giao dịch.  
-
-Độ hỗ trợ càng cao nghĩa là luật xuất hiện thường xuyên trong dữ liệu, do đó có giá trị thực tiễn lớn hơn. Với các tập dữ liệu rất lớn, tiêu chí này giúp loại bỏ những luật chỉ xuất hiện hiếm hoi hoặc mang tính bất thường.
-
-\subsection{Độ tin cậy (Confidence)}
-Độ tin cậy là thước đo phản ánh mức độ chính xác của luật kết hợp. Nó cho biết trong số các giao dịch có chứa toàn bộ các mặt hàng trong $X$, có bao nhiêu phần trăm giao dịch đồng thời chứa các mặt hàng trong $Y$. Độ tin cậy của luật $X \Rightarrow Y$ được định nghĩa:
-\[
-\text{confidence}(X \Rightarrow Y)
-    = \frac{\text{count}(X \cup Y)}{\text{count}(X)},
-\]
-trong đó $\text{count}(Z)$ là số lượng giao dịch chứa tập $Z$.  
-
-Độ tin cậy cao thể hiện rằng mối quan hệ giữa $X$ và $Y$ là mạnh và đáng tin cậy. Đây là một trong hai tiêu chí quan trọng nhất để đánh giá chất lượng của một luật kết hợp.
-
-\subsection{Mục tiêu của khai phá luật kết hợp}
-
-Khai phá luật kết hợp hướng đến việc tìm ra tất cả các luật có ý nghĩa, đồng thời đảm bảo luật đủ phổ biến và đủ chính xác. Vì vậy, hai ngưỡng quan trọng được đặt ra trong quá trình này là:
 \begin{itemize}
-    \item $\texttt{minsup}$: độ hỗ trợ tối thiểu,
-    \item $\texttt{minconf}$: độ tin cậy tối thiểu.
+    \item Item 1: 2 lần
+    \item Item 2: 3 lần
+    \item Item 3: 3 lần
+    \item Item 4: 1 lần (loại)
+    \item Item 5: 3 lần
 \end{itemize}
 
-Một luật chỉ được giữ lại nếu thỏa mãn cả hai ngưỡng trên. Điều này giúp giảm đáng kể số lượng luật không thực sự hữu ích, đồng thời tập trung vào những luật phản ánh hành vi phổ biến của người dùng.
+Do đó L1 gồm: \{1\}, \{2\}, \{3\}, \{5\}.
 
-\section{Các bài toán con trong khai phá luật kết hợp}
+\subsection{Bước 2: Sinh frequent 2-itemsets}
 
-Bài toán khai phá luật kết hợp thường được chia thành hai phần độc lập:
+Join L1 để tạo các ứng viên 2-itemset:
 
-\begin{enumerate}
-    \item \textbf{Tìm tất cả các tập mặt hàng có độ hỗ trợ không nhỏ hơn minsup}  
-    Các tập này được gọi là \textit{tập mục lớn} (large itemsets) hay \textit{tập mục thường xuyên}. Việc tìm được các tập này là bước quan trọng nhất, bởi toàn bộ luật kết hợp về sau đều được suy ra từ chúng.
+\begin{itemize}
+    \item \{1,2\}, \{1,3\}, \{1,5\}
+    \item \{2,3\}, \{2,5\}
+    \item \{3,5\}
+\end{itemize}
 
-    \item \textbf{Sinh luật kết hợp từ các tập mục lớn}  
-    Sau khi có các tập mục lớn, ta xét các tập con của từng tập mục để tạo thành các luật ứng viên, sau đó tính độ tin cậy để lọc ra các luật đạt minconf.
-\end{enumerate}
+Đếm số lần xuất hiện:
 
-Trong nghiên cứu và trong bài tiểu luận này, trọng tâm được đặt vào bài toán thứ nhất—tìm tập mục thường xuyên—vì đây là phần tốn nhiều chi phí tính toán và là động lực cho sự ra đời của các thuật toán nổi tiếng như Apriori, AprioriTid và AprioriHybrid.
+\begin{itemize}
+    \item \{1,2\}: 1 lần (loại)
+    \item \{1,3\}: 2 lần
+    \item \{1,5\}: 1 lần (loại)
+    \item \{2,3\}: 2 lần
+    \item \{2,5\}: 3 lần
+    \item \{3,5\}: 2 lần
+\end{itemize}
+
+Do đó L2 gồm: \{1,3\}, \{2,3\}, \{2,5\}, \{3,5\}.
+
+\subsection{Bước 3: Sinh frequent 3-itemsets}
+
+Join L2 tạo ứng viên:
+
+\begin{itemize}
+    \item \{1,2,3\}
+    \item \{1,2,5\}
+    \item \{1,3,5\}
+    \item \{2,3,5\}
+\end{itemize}
+
+Prune:
+
+\begin{itemize}
+    \item \{1,2,3\}: loại vì \{1,2\} không thuộc L2
+    \item \{1,2,5\}: loại vì \{1,2\} không thuộc L2
+    \item \{1,3,5\}: loại vì \{1,5\} không thuộc L2
+    \item \{2,3,5\}: hợp lệ
+\end{itemize}
+
+Đếm:
+
+\{2,3,5\}: xuất hiện 2 lần nên thuộc L3.
+
+\subsection{Kết quả}
+
+Frequent itemsets thu được:
+
+\begin{itemize}
+    \item Kích thước 1: \{1\}, \{2\}, \{3\}, \{5\}
+    \item Kích thước 2: \{1,3\}, \{2,3\}, \{2,5\}, \{3,5\}
+    \item Kích thước 3: \{2,3,5\}
+\end{itemize}
+
+\section{Kết luận}
+
+Thuật toán Apriori là một phương pháp kinh điển trong khai phá dữ liệu nhờ dựa trên tính chất mạnh mẽ về quan hệ giữa tập và tập con. Mặc dù phải quét dữ liệu nhiều lần, Apriori vẫn hoạt động hiệu quả trong nhiều trường hợp nhờ cơ chế sinh ứng viên theo từng mức và khả năng loại bỏ các ứng viên không cần thiết ngay từ khi sinh ra. Các thuật toán cải tiến như AprioriTid và AprioriHybrid được xây dựng dựa trên Apriori nhằm giảm số lần quét cơ sở dữ liệu và rút ngắn thời gian xử lý. 

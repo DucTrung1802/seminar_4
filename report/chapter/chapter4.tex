@@ -1,198 +1,80 @@
-\chapter{Thuật toán Apriori}
+\chapter{Thuật toán AprioriHybrid}
 
 \section{Giới thiệu}
 
-Thuật toán Apriori là một trong những phương pháp quan trọng nhất trong khai phá dữ liệu để tìm các tập mục thường xuyên (frequent itemsets) và sinh luật kết hợp. Mặc dù ra đời từ rất sớm, Apriori vẫn là nền tảng cho nhiều thuật toán hiện đại nhờ vào cơ chế sinh ứng viên theo từng mức và khả năng loại bỏ mạnh mẽ các tổ hợp không cần thiết. Ý tưởng cốt lõi của Apriori dựa trên một tính chất đặc biệt liên quan đến mối quan hệ giữa một tập và các tập con của nó. Tính chất này giúp giảm đáng kể số lượng ứng viên, khiến cho bài toán trở nên khả thi ngay cả với tập dữ liệu có kích thước lớn.
+AprioriHybrid là sự kết hợp giữa hai thuật toán Apriori và AprioriTid nhằm tận dụng ưu điểm của cả hai. Các quan sát thực nghiệm cho thấy rằng Apriori hoạt động tốt trong các vòng lặp đầu tiên, trong khi AprioriTid trở nên hiệu quả hơn khi kích thước ứng viên tăng và bảng trung gian Ck\_bar trở nên nhỏ hơn so với cơ sở dữ liệu ban đầu. AprioriHybrid được thiết kế để tự động chuyển đổi từ Apriori sang AprioriTid tại thời điểm thích hợp, từ đó cải thiện hiệu năng tổng thể của quá trình khai phá tập mục thường xuyên.
 
-Chương này trình bày chi tiết nguyên lý, quy trình hoạt động, cách sinh ứng viên, cơ chế loại bỏ (prune), đồng thời cung cấp một ví dụ minh họa cụ thể dựa trên nội dung các slide đã cho.
 
-\section{Nguyên lý cốt lõi}
 
-\subsection{Tính chất cơ bản của Apriori}
+\section{Ý tưởng của AprioriHybrid}
 
-Tính chất quan trọng nhất của thuật toán Apriori được phát biểu bằng lời như sau:
-
-\begin{quote}
-Nếu một tập mục kích thước k là một tập mục phổ biến (large itemset), thì mọi tập con có kích thước k-1 của nó cũng phải là tập mục phổ biến.
-\end{quote}
-
-Tính chất này còn được gọi là nguyên lý "đóng xuống" (downward closure). Điều này có một hệ quả quan trọng:
+AprioriHybrid kết hợp hai thuật toán theo chiến lược sau:
 
 \begin{itemize}
-    \item Nếu một tập con bất kỳ có kích thước k-1 không phải là tập phổ biến, thì mọi tập có kích thước k chứa tập con đó chắc chắn không phải là tập phổ biến.
+    \item Sử dụng Apriori trong các vòng lặp đầu tiên.
+    \item Khi dự đoán rằng bảng Ck\_bar (nếu sử dụng AprioriTid) có thể nằm vừa trong bộ nhớ, thuật toán chuyển sang AprioriTid.
 \end{itemize}
 
-Nhờ đó, thuật toán có thể loại bỏ một lượng rất lớn các ứng viên không cần thiết ngay từ đầu, thay vì phải tốn công đếm độ hỗ trợ trong cơ sở dữ liệu.
-
-\subsection{Ý nghĩa của nguyên lý}
-
-Dựa trên nguyên lý ở trên, Apriori có thể:
+Chiến lược này tận dụng ưu điểm:
 
 \begin{itemize}
-    \item giảm số ứng viên cần xét trong mỗi vòng lặp,
-    \item tránh xét các tập mục có kích thước lớn khi tập con của chúng đã không đạt ngưỡng hỗ trợ tối thiểu,
-    \item giúp việc sinh frequent itemsets theo mức (level-wise) trở nên khả thi.
+    \item Apriori hiệu quả khi số lượng ứng viên còn lớn.
+    \item AprioriTid hiệu quả khi ứng viên ít và có thể lưu trữ trong bộ nhớ.
 \end{itemize}
 
-Nhờ đó, mặc dù cần quét cơ sở dữ liệu nhiều lần, Apriori vẫn đạt hiệu quả tốt nhờ giảm mạnh không gian tìm kiếm.
+\section{Quy trình tổng quát của AprioriHybrid}
 
-\section{Quy trình hoạt động của Apriori}
-
-Thuật toán Apriori hoạt động theo phương pháp tìm kiếm theo từng mức. Cụ thể:
+Mặc dù không có giả mã chính thức tuyệt đối, quy trình kết hợp được mô tả như sau:
 
 \begin{enumerate}
-    \item Quét cơ sở dữ liệu để tìm tất cả các tập 1-itemset có độ hỗ trợ không nhỏ hơn ngưỡng tối thiểu. Đây là tập L1.
-    \item Ở mỗi vòng lặp tiếp theo, từ tập L(k-1), thuật toán sinh ra tập ứng viên Ck bằng cách kết hợp các phần tử trong L(k-1).
-    \item Quét cơ sở dữ liệu và đếm độ hỗ trợ cho từng ứng viên trong Ck.
-    \item Tập Lk gồm tất cả các ứng viên trong Ck có độ hỗ trợ đạt ngưỡng tối thiểu.
-    \item Thuật toán dừng khi Lk rỗng.
+    \item Chạy Apriori từ mức 1 và tăng dần k.
+    \item Ở mỗi mức k, ước lượng kích thước của bảng Ck\_bar nếu áp dụng AprioriTid.
+    \item Nếu kích thước dự kiến của Ck\_bar nhỏ hơn hoặc bằng lượng bộ nhớ cho phép:
+    \begin{itemize}
+        \item Chuyển sang AprioriTid từ mức hiện tại.
+        \item Tiếp tục chạy AprioriTid đến hết thuật toán.
+    \end{itemize}
+    \item Ngược lại, tiếp tục sử dụng Apriori.
 \end{enumerate}
 
-Kết quả cuối cùng là hợp của tất cả Lk được sinh ra trong quá trình thực thi.
+Không cần thiết phải chuyển ngược lại thành Apriori. Một khi đã chuyển sang AprioriTid, hiệu năng về sau luôn tốt hơn.
 
-\section{Giả mã thuật toán}
+\section{Lợi ích của việc kết hợp}
 
-Dưới đây là giả mã tương đương với slide, được viết hoàn toàn bằng văn bản thuần:
-
-\begin{verbatim}
-1.  L1 = tập các 1-itemset phổ biến.
-2.  Với k = 2; khi L(k-1) không rỗng; tăng k lên:
-3.      Sinh tập ứng viên Ck từ L(k-1) bằng hàm apriori-gen.
-4.      Với mỗi giao dịch t trong cơ sở dữ liệu:
-5.          Xác định Ct là tập các ứng viên trong Ck xuất hiện trong t.
-6.          Với mỗi ứng viên c trong Ct:
-7.              Tăng bộ đếm số lần xuất hiện của c.
-8.      Lk = tập các ứng viên trong Ck có độ hỗ trợ không nhỏ hơn minsup.
-9.  Hợp tất cả các Lk là kết quả cần tìm.
-\end{verbatim}
-
-\section{Sinh tập ứng viên}
-
-Quá trình sinh Ck từ L(k-1) gồm hai bước chính: bước nối (join) và bước loại bỏ (prune).
-
-\subsection{Bước Join}
-
-Hai phần tử p và q trong L(k-1) được nối với nhau để tạo thành một ứng viên mới c thuộc Ck nếu:
+AprioriHybrid thường vượt trội hơn Apriori trong hầu hết các trường hợp nhờ:
 
 \begin{itemize}
-    \item p và q trùng nhau ở k-2 phần tử đầu tiên,
-    \item phần tử cuối của p có giá trị nhỏ hơn phần tử cuối của q (để tránh trùng lặp).
+    \item Tận dụng khả năng xử lý nhanh của Apriori ở mức thấp.
+    \item Giảm mạnh chi phí quét dữ liệu khi chuyển sang AprioriTid.
+    \item Khi kích thước Ck\_bar giảm dần theo k, thuật toán hưởng lợi từ hiệu năng tăng dần theo thời gian.
 \end{itemize}
 
-Mô tả join trong slide:
-
-\begin{verbatim}
-Chèn vào Ck:
-Chọn p.item1, p.item2, ..., p.item(k-1), q.item(k-1)
-từ L(k-1) p và L(k-1) q
-với điều kiện:
-  p.item1 = q.item1, ..., p.item(k-2) = q.item(k-2)
-  và p.item(k-1) < q.item(k-1)
-\end{verbatim}
-
-\subsection{Bước Prune}
-
-Tập ứng viên được tạo ra sẽ tiếp tục được lọc nhờ tính chất Apriori. Một ứng viên c trong Ck sẽ bị loại bỏ nếu tồn tại bất kỳ tập con có kích thước k-1 của c không nằm trong L(k-1).
-
-Mô tả prune:
-
-\begin{verbatim}
-Với mỗi itemset c trong Ck:
-    Với mỗi tập con s của c có kích thước k-1:
-        Nếu s không nằm trong L(k-1), loại c khỏi Ck.
-\end{verbatim}
-
-Đây là một trong những bước giúp Apriori vận hành hiệu quả.
-
-\section{Ví dụ minh họa}
-
-Xét cơ sở dữ liệu giao dịch sau:
-
-\begin{center}
-\begin{tabular}{|c|c|}
-\hline
-TID & Items \\ \hline
-100 & 1   3   4 \\
-200 & 2   3   5 \\
-300 & 1   2   3   5 \\
-400 & 2   5 \\
-\hline
-\end{tabular}
-\end{center}
-
-Giả sử ngưỡng hỗ trợ tối thiểu minsup là 0.5, tương đương cần xuất hiện ít nhất 2 lần trong 4 giao dịch.
-
-\subsection{Bước 1: Tìm frequent 1-itemsets}
-
-Đếm số lần xuất hiện:
+Theo các kết quả thực nghiệm, hiệu năng cải thiện nhiều nhất khi kích thước Ck\_bar giảm từ từ theo từng mức. Khi điều này xảy ra:
 
 \begin{itemize}
-    \item Item 1: 2 lần
-    \item Item 2: 3 lần
-    \item Item 3: 3 lần
-    \item Item 4: 1 lần (loại)
-    \item Item 5: 3 lần
+    \item AprioriTid được kích hoạt sớm.
+    \item Chi phí đọc đĩa giảm mạnh.
+    \item Thời gian thực thi tổng thể giảm đáng kể.
 \end{itemize}
 
-Do đó L1 gồm: \{1\}, \{2\}, \{3\}, \{5\}.
+Ngược lại, nếu kích thước Ck\_bar giảm đột ngột hoặc không giảm đều, thời điểm chuyển đổi có thể đến muộn hơn, nhưng hiệu năng tổng thể vẫn tốt hơn Apriori.
 
-\subsection{Bước 2: Sinh frequent 2-itemsets}
+\section{Phân tích ưu điểm và hạn chế}
 
-Join L1 để tạo các ứng viên 2-itemset:
+\subsection{Ưu điểm}
 
 \begin{itemize}
-    \item \{1,2\}, \{1,3\}, \{1,5\}
-    \item \{2,3\}, \{2,5\}
-    \item \{3,5\}
+    \item Tối ưu hóa tự động theo từng mức, phù hợp cho dữ liệu lớn.
+    \item Tiết kiệm thời gian quét dữ liệu khi mức k cao.
+    \item Giảm chi phí truy cập đĩa khi Ck\_bar vừa bộ nhớ.
+    \item Thường nhanh hơn cả Apriori và AprioriTid trong thực tế.
 \end{itemize}
 
-Đếm số lần xuất hiện:
+\subsection{Hạn chế}
 
 \begin{itemize}
-    \item \{1,2\}: 1 lần (loại)
-    \item \{1,3\}: 2 lần
-    \item \{1,5\}: 1 lần (loại)
-    \item \{2,3\}: 2 lần
-    \item \{2,5\}: 3 lần
-    \item \{3,5\}: 2 lần
+    \item Cần ước lượng kích thước Ck\_bar, yêu cầu thêm logic trong cài đặt.
+    \item Trong trường hợp dữ liệu rất nhỏ, lợi ích có thể không rõ ràng.
+    \item Khi dữ liệu có nhiều giao dịch rất lớn, Ck\_bar ban đầu có thể quá lớn để việc chuyển đổi diễn ra sớm.
 \end{itemize}
 
-Do đó L2 gồm: \{1,3\}, \{2,3\}, \{2,5\}, \{3,5\}.
-
-\subsection{Bước 3: Sinh frequent 3-itemsets}
-
-Join L2 tạo ứng viên:
-
-\begin{itemize}
-    \item \{1,2,3\}
-    \item \{1,2,5\}
-    \item \{1,3,5\}
-    \item \{2,3,5\}
-\end{itemize}
-
-Prune:
-
-\begin{itemize}
-    \item \{1,2,3\}: loại vì \{1,2\} không thuộc L2
-    \item \{1,2,5\}: loại vì \{1,2\} không thuộc L2
-    \item \{1,3,5\}: loại vì \{1,5\} không thuộc L2
-    \item \{2,3,5\}: hợp lệ
-\end{itemize}
-
-Đếm:
-
-\{2,3,5\}: xuất hiện 2 lần nên thuộc L3.
-
-\subsection{Kết quả}
-
-Frequent itemsets thu được:
-
-\begin{itemize}
-    \item Kích thước 1: \{1\}, \{2\}, \{3\}, \{5\}
-    \item Kích thước 2: \{1,3\}, \{2,3\}, \{2,5\}, \{3,5\}
-    \item Kích thước 3: \{2,3,5\}
-\end{itemize}
-
-\section{Kết luận}
-
-Thuật toán Apriori là một phương pháp kinh điển trong khai phá dữ liệu nhờ dựa trên tính chất mạnh mẽ về quan hệ giữa tập và tập con. Mặc dù phải quét dữ liệu nhiều lần, Apriori vẫn hoạt động hiệu quả trong nhiều trường hợp nhờ cơ chế sinh ứng viên theo từng mức và khả năng loại bỏ các ứng viên không cần thiết ngay từ khi sinh ra. Các thuật toán cải tiến như AprioriTid và AprioriHybrid được xây dựng dựa trên Apriori nhằm giảm số lần quét cơ sở dữ liệu và rút ngắn thời gian xử lý. 

@@ -1,221 +1,401 @@
-\chapter{Thuật toán AprioriTid}
+\chapter{Đánh giá hiệu năng và so sánh các thuật toán}
+\section{Các yếu tố ảnh hưởng đến hiệu năng}
 
-\section{Giới thiệu}
+Hiệu năng của các thuật toán khai thác tập mục thường xuyên phụ thuộc mạnh vào đặc trưng dữ liệu và một số tham số điều khiển thuật toán. Dưới đây là những yếu tố quan trọng nhất:
 
-AprioriTid là một biến thể quan trọng của thuật toán Apriori truyền thống, được thiết kế nhằm giảm chi phí đọc lại toàn bộ cơ sở dữ liệu trong các vòng lặp sau mức 1. Điểm khác biệt chính giữa hai thuật toán nằm ở cách tính độ hỗ trợ (support) của các ứng viên. Trong khi Apriori phải truy cập lại toàn bộ tập giao dịch D ở mỗi mức k để xác định xem các ứng viên có xuất hiện trong giao dịch hay không, AprioriTid sử dụng một cấu trúc dữ liệu trung gian để đại diện cho thông tin cần thiết. Nhờ đó, khi mức k tăng lên (tức các ứng viên lớn dần), AprioriTid thường có hiệu năng tốt hơn.
+1. Số lượng giao dịch (|D|)
 
-\section{Ý tưởng và nguyên lý hoạt động}
+Tập giao dịch càng lớn thì thời gian quét CSDL càng tăng. Đối với Apriori, số lần quét CSDL theo từng vòng lặp làm chi phí tăng tuyến tính theo |D|.
 
-AprioriTid vẫn sử dụng hàm sinh ứng viên apriori-gen giống Apriori. Tuy nhiên, thay vì quét cơ sở dữ liệu gốc D để đếm support, thuật toán duy trì một bảng trung gian Ck\_bar, trong đó mỗi dòng ứng với một giao dịch và chứa danh sách các ứng viên có khả năng xuất hiện trong giao dịch đó.
+2. Số lượng mặt hàng (|I|)
 
-Một phần tử của Ck\_bar có dạng:
+Khi |I| lớn, không gian ứng viên có thể bùng nổ (combinatorial explosion), làm số lượng ứng viên tăng theo cấp số nhân. Điều này ảnh hưởng trực tiếp đến Apriori và AprioriTid.
 
-\begin{center}
-\texttt{< TID , list\_of\_candidate\_itemsets >}
-\end{center}
+3. Độ dài trung bình giao dịch (T)
 
-Trong đó:
+Các giao dịch dài hơn làm tăng khả năng tạo ra nhiều tập k-mục tiềm năng → nhiều ứng viên hơn → thời gian kiểm tra hỗ trợ (support counting) lâu hơn.
 
-\begin{itemize}
-    \item TID là mã giao dịch.
-    \item list\_of\_candidate\_itemsets là danh sách các ứng viên k-itemset có thể tồn tại trong giao dịch tương ứng.
-\end{itemize}
+4. Ngưỡng hỗ trợ tối thiểu (minsup)
 
-Điểm mạnh của cấu trúc này là:
+minsup cao → ít tập thường xuyên → ít vòng lặp → chạy nhanh
 
-\begin{itemize}
-    \item Không cần đọc lại toàn bộ dữ liệu D khi k >= 2.
-    \item Khi k tăng, số lượng ứng viên trong mỗi giao dịch giảm mạnh, khiến kích thước Ck\_bar ngày càng nhỏ.
-    \item Thời gian đếm support giảm đáng kể.
-\end{itemize}
+minsup thấp → sinh ra rất nhiều ứng viên → thuật toán có thể chậm mạnh hoặc tốn nhiều bộ nhớ
 
-\section{Giả mã thuật toán AprioriTid}
+5. Số lượng ứng viên sinh ra trong mỗi vòng lặp
 
-Dựa trên slide, giả mã thuật toán được viết lại như sau:
+Đây là yếu tố quyết định tốc độ: càng nhiều ứng viên, thuật toán càng chậm.
 
-\begin{verbatim}
-1.  L1 = tập các frequent 1-itemset.
-2.  C1_bar = cơ sở dữ liệu D ban đầu.
-3.  For k = 2; khi L(k-1) không rỗng; tăng k lên:
-4.      Ck = apriori-gen( L(k-1) ).   // Sinh ứng viên mới
-5.      Ck_bar = rỗng.
-6.      Với mỗi dòng t trong C(k-1)_bar:
-7.          Xác định tập Cprime gồm các ứng viên trong Ck xuất hiện
-                trong t (dựa trên tập các item cấp thấp hơn).
-8.          Với mỗi c trong Cprime:
-9.              Tăng bộ đếm c.count lên 1.
-10.             Nếu Cprime không rỗng, đưa 
-                < TID , Cprime > vào Ck_bar.
-11.     Lk = các ứng viên trong Ck có c.count >= minsup.
-12. Trả về hợp của tất cả Lk.
-\end{verbatim}
+6. Chiến lược lưu trữ và truy xuất dữ liệu
 
-Khác với Apriori:
+Apriori dùng giao dịch gốc.
+AprioriTid và Hybrid lưu bảng ID-list, giúp giảm kích thước dữ liệu về sau nhưng tốn bộ nhớ lúc đầu.
 
-\begin{itemize}
-    \item Ở mức k = 1, AprioriTid giống hệt Apriori.
-    \item Từ mức k = 2 trở đi, AprioriTid không sử dụng tập giao dịch D nữa mà chỉ dùng C(k-1)\_bar.
-\end{itemize}
 
-\section{Ví dụ minh họa}
 
-Xét tập giao dịch sau:
 
-\begin{center}
-\begin{tabular}{|c|c|}
-\hline
-TID & Items \\ \hline
-100 & 1\ 3\ 4 \\
-200 & 2\ 3\ 5 \\
-300 & 1\ 2\ 3\ 5 \\
-400 & 2\ 5 \\
-\hline
-\end{tabular}
-\end{center}
+\section{Thiết kế thực nghiệm}
+\subsection{Môi trường thực nghiệm}
 
-Giả sử ngưỡng hỗ trợ tối thiểu minsup = 2.
-
-\subsection{Bước 1: Tìm L1 và C1\_bar}
-
-Đếm support từng item:
-
-\begin{itemize}
-    \item \{1\}: xuất hiện 2 lần
-    \item \{2\}: 3 lần
-    \item \{3\}: 3 lần
-    \item \{4\}: 1 lần (loại)
-    \item \{5\}: 3 lần
-\end{itemize}
-
-Do đó:
-
-\begin{itemize}
-    \item L1 = \{1\}, \{2\}, \{3\}, \{5\}
-\end{itemize}
-
-C1\_bar chính là dữ liệu gốc, nhưng chuyển thành dạng:
-
-\begin{center}
-\texttt{< TID , set-of-1-itemsets >}
-\end{center}
-
+(Điền thông tin hệ thống tại đây)
 Ví dụ:
 
+CPU: Intel i7 - 12700H
+
+RAM: 16 GB
+
+Hệ điều hành: Windows 11
+
+Ngôn ngữ cài đặt thuật toán: Python
+
+Phiên bản thư viện hỗ trợ (nếu có): efficient\_apriori
+
+
+
+
+\subsection{Tập dữ liệu và cấu hình tham số}
+
+Trong thực nghiệm, sử dụng 6 tập dữ liệu tổng hợp với các thông số được mô tả trong
+Bảng~\ref{tab:dataset-config}.
+
+\begin{table}[H]
+    \centering
+    \caption{Cấu hình các tập dữ liệu sử dụng trong thực nghiệm}
+    \label{tab:dataset-config}
+
+    \begin{tabular}{|c|c|c|c|p{8cm}|}
+        \hline
+        \textbf{Dataset} & \textbf{|D|} & \textbf{|I|} & \textbf{T} & \textbf{Minsup thử nghiệm}                       \\ \hline
+
+        T5.I2.D100K      & 100000       & 2            & 5          & {0.25\%, 0.33\%, 0.5\%, 0.75\%, 1\%, 1.5\%, 2\%} \\ \hline
+        T10.I2.D100K     & 100000       & 2            & 10         & {0.25\%, 0.33\%, 0.5\%, 0.75\%, 1\%, 1.5\%, 2\%} \\ \hline
+        T10.I4.D100K     & 100000       & 4            & 10         & {0.25\%, 0.33\%, 0.5\%, 0.75\%, 1\%, 1.5\%, 2\%} \\ \hline
+        T20.I2.D100K     & 100000       & 2            & 20         & {0.25\%, 0.33\%, 0.5\%, 0.75\%, 1\%, 1.5\%, 2\%} \\ \hline
+        T20.I4.D100K     & 100000       & 4            & 20         & {0.25\%, 0.33\%, 0.5\%, 0.75\%, 1\%, 1.5\%, 2\%} \\ \hline
+        T20.I6.D100K     & 100000       & 6            & 20         & {0.25\%, 0.33\%, 0.5\%, 0.75\%, 1\%, 1.5\%, 2\%} \\ \hline
+    \end{tabular}
+\end{table}
+
+
+
+
+\subsection{Tiêu chí đánh giá}
 \begin{itemize}
-    \item TID 100: \{1\}, \{3\}, \{4\}
-    \item TID 200: \{2\}, \{3\}, \{5\}
-    \item TID 300: \{1\}, \{2\}, \{3\}, \{5\}
-    \item TID 400: \{2\}, \{5\}
+    \item Thời gian thực thi
+    \item Số lần quét CSDL
+    \item Số lượng và kích thước tập ứng viên
+    \item Mức sử dụng bộ nhớ
 \end{itemize}
 
-\subsection{Bước 2: Sinh C2 và tính L2}
 
-Từ L1, sinh C2 gồm các tập 2-itemset:
 
+
+\section{So sánh Apriori, AprioriTid và AprioriHybrid}
+\subsection{Số lần quét CSDL}
+
+Apriori: mỗi vòng lặp cần 1 lần quét lại toàn bộ CSDL → rất tốn chi phí khi số vòng lặp lớn.
+
+AprioriTid: sau vòng đầu tiên, không cần quét CSDL nữa. Thuật toán chỉ làm việc trên bảng ID-list, giúp giảm chi phí I/O.
+
+AprioriHybrid: kết hợp hai phương pháp.
+
+Giai đoạn đầu dùng Apriori (khi ID-list còn lớn).
+
+Khi kích thước ID-list nhỏ hơn CSDL gốc thì chuyển sang AprioriTid.
+
+→ Về lý thuyết: AprioriTid ≤ Hybrid ≤ Apriori (về số lần đọc CSDL).
+
+
+
+
+\subsection{Chi phí sinh và kiểm tra ứng viên}
+
+Apriori: tốn chi phí kiểm tra ứng viên trên toàn bộ giao dịch.
+
+AprioriTid: sử dụng danh sách ID-list nên việc kiểm tra hỗ trợ nhanh hơn ở các vòng sau.
+
+Hybrid: giảm chi phí ở những vòng sâu (vòng 3 trở đi).
+
+Nhược điểm AprioriTid: ID-list ban đầu rất lớn → tốn bộ nhớ.
+
+
+
+
+\subsection{Tốc độ thực thi tổng thể}
+
+Tốc độ phụ thuộc vào:
 \begin{itemize}
-    \item \{1 2\}, \{1 3\}, \{1 5\}
-    \item \{2 3\}, \{2 5\}
-    \item \{3 5\}
+    \item Số vòng lặp
+    \item Số lượng ứng viên sinh ra
+    \item Chi phí đọc/ghi dữ liệu
+    \item Kết luận thường gặp:
+    \item minsup cao → cả ba thuật toán đều nhanh
+    \item minsup thấp → Apriori chậm nhất, AprioriTid hoặc Hybrid tốt hơn tùy dataset
 \end{itemize}
 
-Dựa trên C1\_bar, ta xác định các ứng viên xuất hiện trong từng giao dịch:
+
+
+
+\subsection{Mức sử dụng bộ nhớ}
+
+Apriori: tiết kiệm bộ nhớ, chỉ giữ dữ liệu gốc + ứng viên hiện tại.
+
+AprioriTid: chiếm bộ nhớ lớn vì phải lưu bảng ID-list cho từng ứng viên.
+
+Hybrid: dùng nhiều bộ nhớ ở giai đoạn chuyển tiếp nhưng nhìn chung tiết kiệm hơn AprioriTid.
+
+
+
+
+\subsection{Ảnh hưởng của minsup (thấp / cao)}
+
+minsup cao
+→ ít ứng viên → cả 3 thuật toán chạy nhanh → Apriori có thể ngang bằng hoặc nhanh hơn do không tốn ID-list.
+
+minsup thấp
+→ nhiều ứng viên → Apriori chậm nhất vì phải quét lại CSDL.
+→ AprioriTid và Hybrid vượt trội hơn, đặc biệt khi số vòng lặp lớn.
+
+
+
+
+\subsection{Kịch bản phù hợp cho từng thuật toán}
+
+Apriori: dataset nhỏ hoặc minsup cao.
+
+AprioriTid: dataset lớn, minsup thấp, số vòng lặp nhiều.
+
+Hybrid: trường hợp tổng quát – thường tốt nhất nếu không biết trước đặc trưng dữ liệu.
+
+
+
+
+
+\section{Kết quả thực nghiệm}
+
+Trong phần này, chúng tôi trình bày các kết quả thu được từ quá trình đánh giá hiệu năng của ba thuật toán
+Apriori, AprioriTid và AprioriHybrid. Kết quả bao gồm các bảng tổng hợp số liệu và các biểu đồ trực quan
+giúp so sánh tốc độ thực thi, số lượng ứng viên và mức sử dụng bộ nhớ.
+
+% =======================
+% BẢNG 1
+% =======================
+\subsection{Bảng tổng hợp số lượng ứng viên và thời gian chạy theo thuật toán (bảng 1)}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{img/bảng 1.pdf}
+    \caption{Bảng số lượng ứng viên theo mỗi vòng lặp của ba thuật toán}
+    \label{fig:bang1}
+\end{figure}
+
+% =======================
+% BẢNG 2
+% =======================
+\subsection{Bảng tổng hợp số lượng ứng viên và thời gian chạy theo thuật toán (bảng 2)}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{img/bảng 2.pdf}
+    \caption{Bảng thời gian thực thi của Apriori, AprioriTid và AprioriHybrid}
+    \label{fig:bang2}
+\end{figure}
+
+% =======================
+% HÌNH 1
+% =======================
+\subsection{Biểu đồ số lượng ứng viên theo từng vòng}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/hình 1.pdf}
+    \caption{Biểu đồ số thời gian chạy cho Dataset T5.I2.D100K}
+    \label{fig:hinh1}
+\end{figure}
+
+% =======================
+% HÌNH 2
+% =======================
+\subsection{Biểu đồ thời gian thực thi của ba thuật toán}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/hình 2.pdf}
+    \caption{Biểu đồ số thời gian chạy cho Dataset T10.I2.D100K}
+    \label{fig:hinh2}
+\end{figure}
+
+% =======================
+% HÌNH 3
+% =======================
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/hình 3.pdf}
+    \caption{Biểu đồ số thời gian chạy cho Dataset T10.I4.D100K}
+    \label{fig:hinh3}
+\end{figure}
+
+% =======================
+% HÌNH 4
+% =======================
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/hình 4.pdf}
+    \caption{Biểu đồ số thời gian chạy cho Dataset T20.I2.D100K}
+    \label{fig:hinh4}
+\end{figure}
+
+% =======================
+% HÌNH 5
+% =======================
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/hình 5.pdf}
+    \caption{Biểu đồ số thời gian chạy cho Dataset T20.I4.D100K}
+    \label{fig:hinh5}
+\end{figure}
+
+% =======================
+% HÌNH 6
+% =======================
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/hình 6.pdf}
+    \caption{Biểu đồ số thời gian chạy cho Dataset T20.I6.D100K}
+    \label{fig:hinh6}
+\end{figure}
+
+
+
+
+\section{Nhận xét và thảo luận}
+\subsection{Ưu và nhược điểm từng thuật toán}
+
+Apriori:
+
+Ưu: đơn giản, dễ cài đặt, ít tốn RAM
+
+Nhược: nhiều lần quét CSDL, không hiệu quả khi minsup thấp
+
+AprioriTid:
+
+Ưu: không quét lại CSDL sau vòng đầu
+
+Nhược: danh sách ID-list lớn, dễ tràn bộ nhớ
+
+Hybrid:
+
+Ưu: cân bằng giữa hai thuật toán, thường nhanh nhất
+
+Nhược: logic phức tạp hơn, cần điều kiện chuyển chế độ
+
+
+
+\subsection{Giải thích sự khác biệt giữa ba phương pháp}
+
+Lý do chủ yếu: cách lưu trữ và cách tính hỗ trợ khác nhau.
 
 \begin{itemize}
-    \item TID 100: \{1 3\}
-    \item TID 200: \{2 3\}, \{2 5\}, \{3 5\}
-    \item TID 300: tất cả trừ \{1 2\} và \{1 5\}
-    \item TID 400: \{2 5\}
+    \item Apriori dùng dữ liệu gốc
+    \item AprioriTid dùng ID-list
+    \item Hybrid chuyển đổi giữa hai giai đoạn
 \end{itemize}
 
-Đếm support:
+
+
+
+\subsection{Các trường hợp sử dụng thích hợp}
+
+Dựa trên các đặc điểm về cấu trúc dữ liệu, chi phí xử lý và mức độ tiêu tốn tài nguyên, mỗi thuật toán trong ba thuật toán Apriori, AprioriTid và AprioriHybrid phù hợp với các tình huống ứng dụng khác nhau. Phần này trình bày các kịch bản sử dụng điển hình cho từng thuật toán.
+
+\subsubsection*{Thuật toán Apriori}
+
+Thuật toán Apriori phù hợp trong các trường hợp:
+\begin{itemize}
+    \item Tập dữ liệu có kích thước nhỏ hoặc trung bình, với số vòng lặp không quá lớn.
+    \item Ngưỡng hỗ trợ tối thiểu (\textit{minsup}) tương đối cao, giúp giảm số lượng tập ứng viên.
+    \item Hệ thống ưu tiên tính đơn giản, dễ triển khai và dễ kiểm soát.
+    \item Các bài toán phân tích giao dịch ở quy mô vừa, chẳng hạn như
+          phân tích giỏ hàng trong các cửa hàng bán lẻ nhỏ hoặc tập dữ liệu hành vi người dùng có quy mô hạn chế
+          (<ví dụ: dữ liệu giỏ hàng từ một chuỗi cửa hàng nhỏ, dữ liệu clickstream của một website quy mô nhỏ>).
+\end{itemize}
+
+\subsubsection*{Thuật toán AprioriTid}
+
+AprioriTid thích hợp với các tình huống:
+\begin{itemize}
+    \item Ngưỡng hỗ trợ thấp, khiến số lượng ứng viên tăng mạnh qua từng vòng lặp.
+    \item Tập dữ liệu có số lượng giao dịch lớn nhưng độ dài mỗi giao dịch không quá lớn.
+    \item Hệ thống có đủ bộ nhớ để lưu bảng ID-list trong quá trình thực thi.
+    \item Các ứng dụng khai thác luật kết hợp yêu cầu xử lý khối lượng lớn dữ liệu, ví dụ:
+          phân tích giỏ hàng trong các hệ thống bán lẻ quy mô lớn hoặc phân tích log hành vi người dùng trong các nền tảng thương mại điện tử
+          (<ví dụ: dataset giao dịch của siêu thị lớn, dữ liệu clickstream của sàn thương mại điện tử>).
+\end{itemize}
+
+\subsubsection*{Thuật toán AprioriHybrid}
+
+AprioriHybrid kết hợp ưu điểm của hai thuật toán trên và phù hợp với phần lớn các tình huống thực tế:
+\begin{itemize}
+    \item Các tập dữ liệu lớn và đa dạng, với đặc trưng không ổn định hoặc khó dự đoán trước.
+    \item Các trường hợp yêu cầu cân bằng giữa tốc độ thực thi và mức sử dụng bộ nhớ.
+    \item Khi hệ thống cần xử lý nhiều loại dữ liệu khác nhau, tránh phụ thuộc vào một thuật toán cố định.
+    \item Các ứng dụng phân tích nâng cao trong thương mại điện tử, marketing và tài chính, chẳng hạn như
+          phân tích thị trường, xây dựng hệ thống gợi ý sản phẩm hoặc khai thác mẫu chi tiêu của khách hàng
+          (<ví dụ: dữ liệu giao dịch ngân hàng, dữ liệu hành vi người dùng của nền tảng streaming>).
+\end{itemize}
+
+
+
+
+\subsection{Hạn chế và hướng cải thiện}
+
+Mặc dù các thuật toán Apriori, AprioriTid và AprioriHybrid được sử dụng rộng rãi trong khai thác luật kết hợp, chúng vẫn tồn tại một số hạn chế nhất định. Phần này trình bày các hạn chế chính và gợi ý một số hướng cải thiện tiềm năng trong tương lai.
+
+\subsubsection*{Hạn chế}
 
 \begin{itemize}
-    \item \{1 3\}: 2 lần
-    \item \{2 3\}: 2 lần
-    \item \{2 5\}: 3 lần
-    \item \{3 5\}: 2 lần
-    \item Các ứng viên còn lại: 1 lần hoặc 0
+    \item \textbf{Chi phí sinh ứng viên lớn:} 
+    Tất cả các thuật toán dựa trên Apriori đều phụ thuộc vào chiến lược sinh--kiểm tra (\textit{generate-and-test}), dẫn đến số lượng ứng viên tăng theo cấp số nhân khi \textit{minsup} thấp hoặc khi tập mặt hàng lớn.
+
+    \item \textbf{Nhiều lần quét cơ sở dữ liệu:} 
+    Apriori yêu cầu quét toàn bộ cơ sở dữ liệu nhiều lần, gây tiêu tốn thời gian I/O đáng kể đối với các tập dữ liệu lớn.
+
+    \item \textbf{Tốn bộ nhớ (AprioriTid và Hybrid):} 
+    Việc duy trì các bảng ID-list trong AprioriTid và AprioriHybrid làm tăng đáng kể mức sử dụng bộ nhớ, đặc biệt ở các vòng lặp đầu.
+
+    \item \textbf{Không phù hợp với dữ liệu rất lớn:}
+    Các thuật toán Apriori truyền thống không hiệu quả trong môi trường dữ liệu lớn (\textit{big data}) do chi phí xử lý cao và không tận dụng được khả năng tính toán song song hiện đại.
+
+    \item \textbf{Không tối ưu cho dữ liệu có cấu trúc phức tạp:}
+    Các thuật toán này chủ yếu phù hợp với dữ liệu dạng giao dịch; chúng không hoạt động tốt với dữ liệu có cấu trúc phức tạp như chuỗi thời gian, dữ liệu phân cấp hoặc dữ liệu đồ thị.
 \end{itemize}
 
-Do đó:
+
+
+
+
+\subsubsection*{Hướng cải thiện}
 
 \begin{itemize}
-    \item L2 = \{1 3\}, \{2 3\}, \{2 5\}, \{3 5\}
+    \item \textbf{Sử dụng các thuật toán thay thế không sinh ứng viên:} 
+    Các thuật toán như FP-Growth hoặc ECLAT giúp loại bỏ chi phí sinh ứng viên và có khả năng mở rộng tốt hơn đối với tập dữ liệu lớn.
+
+    \item \textbf{Tối ưu hóa truy xuất dữ liệu:}
+    Áp dụng các kỹ thuật như nén giao dịch, đánh chỉ mục hoặc sử dụng cấu trúc dữ liệu hiệu quả hơn để giảm chi phí quét CSDL.
+
+    \item \textbf{Khai thác tính song song và phân tán:} 
+    Việc triển khai trên các nền tảng như Hadoop MapReduce hoặc Spark cho phép mở rộng thuật toán tới quy mô dữ liệu rất lớn.
+
+    \item \textbf{Điều chỉnh động ngưỡng \textit{minsup}:} 
+    Một số nghiên cứu đề xuất thích ứng ngưỡng hỗ trợ theo cấu trúc dữ liệu giúp giảm số lượng ứng viên và tăng hiệu quả khai thác.
+
+    \item \textbf{Ứng dụng học máy để giảm không gian tìm kiếm:} 
+    Các mô hình học máy hoặc học sâu có thể hỗ trợ dự đoán các tập mục tiềm năng, qua đó giảm số lượng ứng viên phải xét trong từng vòng lặp.
+
+    \item \textbf{Phát triển phiên bản tối ưu theo đặc trưng dữ liệu:}
+    Tuỳ chỉnh thuật toán cho từng loại dữ liệu cụ thể 
+    (<ví dụ: dữ liệu giao dịch thời gian thực, dữ liệu tuần tự, dữ liệu đồ thị>) 
+    giúp tăng hiệu quả rõ rệt.
 \end{itemize}
-
-C2\_bar được xây dựng tương tự, ví dụ:
-
-\begin{itemize}
-    \item TID 100: \{1 3\}
-    \item TID 200: \{2 3\}, \{2 5\}, \{3 5\}
-    \item TID 300: \{1 3\}, \{2 3\}, \{2 5\}, \{3 5\}
-    \item TID 400: \{2 5\}
-\end{itemize}
-
-\subsection{Bước 3: Sinh C3 và tính L3}
-
-Join L2 để sinh các ứng viên 3-itemset:
-
-\begin{itemize}
-    \item \{2 3 5\}
-\end{itemize}
-
-Sử dụng C2\_bar:
-
-\begin{itemize}
-    \item TID 200: có \{2 3\} và \{2 5\} và \{3 5\}, nên chứa \{2 3 5\}
-    \item TID 300: tương tự
-    \item TID 100 và 400: không chứa đủ bộ 2-itemset cần thiết
-\end{itemize}
-
-Đếm support:
-
-\begin{itemize}
-    \item \{2 3 5\}: 2 lần
-\end{itemize}
-
-Suy ra:
-
-\begin{itemize}
-    \item L3 = \{2 3 5\}
-\end{itemize}
-
-C3\_bar chỉ còn:
-
-\begin{itemize}
-    \item TID 200: \{2 3 5\}
-    \item TID 300: \{2 3 5\}
-\end{itemize}
-
-\subsection{Kết quả cuối cùng}
-
-Các frequent itemsets của AprioriTid:
-
-\begin{itemize}
-    \item L1: \{1\}, \{2\}, \{3\}, \{5\}
-    \item L2: \{1 3\}, \{2 3\}, \{2 5\}, \{3 5\}
-    \item L3: \{2 3 5\}
-\end{itemize}
-
-Tập kết quả trùng hoàn toàn với Apriori truyền thống, nhưng số lần truy cập cơ sở dữ liệu giảm đáng kể.
-
-\section{Nhận xét về thuật toán AprioriTid}
-
-Ưu điểm:
-
-\begin{itemize}
-    \item Không cần đọc lại tập giao dịch gốc khi k >= 2.
-    \item Kích thước bảng Ck\_bar giảm dần khi k tăng, do các ứng viên lớn thường hiếm.
-    \item Xử lý nhanh hơn Apriori trên các tập dữ liệu lớn hoặc thưa.
-\end{itemize}
-
-Hạn chế:
-
-\begin{itemize}
-    \item Ở mức k = 1, AprioriTid giống Apriori nên không có lợi thế.
-    \item Nếu dữ liệu có nhiều giao dịch rất lớn, kích thước Ck\_bar có thể lớn ở các mức đầu.
-\end{itemize}
-
-\section{Kết luận}
-
-AprioriTid là một cải tiến quan trọng của Apriori, đặc biệt hữu ích khi dữ liệu lớn và các tập ứng viên kích thước cao trở nên hiếm. Việc lưu trữ và sử dụng bảng trung gian Ck\_bar giúp giảm đáng kể chi phí quét dữ liệu và mang lại hiệu quả cao hơn so với Apriori truyền thống ở các mức k lớn.
